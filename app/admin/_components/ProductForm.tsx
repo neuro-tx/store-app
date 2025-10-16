@@ -6,6 +6,8 @@ import { Loader, Plus } from "lucide-react";
 import React, { useTransition } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import ImagesInfo from "./ImagesInfo";
+import { productSchema, ProductType } from "@/lib/product-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const ProductForm = () => {
   const [submiting, startSubmit] = useTransition();
@@ -16,7 +18,22 @@ const ProductForm = () => {
   };
 
   const methods = useForm();
-  const form = useForm();
+  const form = useForm<ProductType>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: "",
+      category: "",
+      description: "",
+      images: [],
+      capacity: "",
+      discount: 0,
+      price: 0,
+      brand: "",
+      isAvailable: true,
+      isFeatured: false,
+    },
+  });
+  
   return (
     <div>
       <FormProvider {...methods}>
