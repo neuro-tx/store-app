@@ -10,7 +10,7 @@ import { ModeToggle } from "./ModeToggle";
 import { Button } from "./ui/button";
 import { TextAlignJustify, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { useIsMobile } from "@/hooks/use-moblie";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Header = () => {
   const path = usePathname();
