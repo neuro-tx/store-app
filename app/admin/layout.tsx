@@ -24,7 +24,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <div className="mx-auto container p-4 lg:px-6 py-3">
               <div className="space-y-6">
                 <div className="py-2 pb-4 border-b">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-3">
                     <div>
                       <h1 className="text-2xl font-bold font-cairo text-primary">
                         لوحة التحكم الإدارية
@@ -35,7 +35,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
                     </div>
                     <Link
                       href="/"
-                      className="border px-5 py-2 rounded-lg text-sm bg-primary hover:opacity-95"
+                      className="border px-5 py-2 rounded-lg text-sm bg-primary hover:opacity-95 w-full md:w-fit"
                     >
                       العودة للرئيسية
                     </Link>

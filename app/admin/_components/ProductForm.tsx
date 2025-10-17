@@ -8,6 +8,9 @@ import { useForm, FormProvider } from "react-hook-form";
 import ImagesInfo from "./ImagesInfo";
 import { productSchema, ProductType } from "@/lib/product-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import BasicInfo from "./BasicInfo";
+import PricingInfo from "./PricingInfo";
+import DescriptionInfo from "./DescriptionInfo";
 
 const ProductForm = () => {
   const [submiting, startSubmit] = useTransition();
@@ -39,7 +42,12 @@ const ProductForm = () => {
       <FormProvider {...methods}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            
             <ImagesInfo />
+            <BasicInfo />
+            <PricingInfo />
+            <DescriptionInfo />
+
             <Button
               type="submit"
               disabled={submiting}

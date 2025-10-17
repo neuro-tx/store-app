@@ -17,3 +17,16 @@ export const ADMIN_LINKS = [
     icon: List,
   },
 ] as const;
+
+export const categories = [
+  { id: "zeyt-zaytoun", name: "زيوت الزيتون" },
+  { id: "tamr", name: "التمور" },
+  { id: "montajat-nakhl", name: "منتجات النخيل" },
+  { id: "tawabel-aashab", name: "التوابل والأعشاب" },
+  { id: "marahim-zuyut", name: "المراهم والزيوت الطبيعية" },
+  { id: "halawiyat-taqlidiyya", name: "الحلويات التقليدية" },
+  { id: "asal-washarab", name: "العسل والشراب الطبيعي" },
+  { id: "moksarat-bodoor", name: "المكسرات والبذور" },
+  { id: "shai-khalatat", name: "الشاي والخلطات العشبية" },
+  { id: "olob-hadaya", name: "علب الهدايا والمجموعات" },
+] as const;
