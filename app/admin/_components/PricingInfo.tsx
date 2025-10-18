@@ -1,10 +1,22 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+"use client";
+
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 
 const PricingInfo = () => {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+  const discount = watch("discount");
+  const isActive = discount > 0;
+
   return (
     <section className="border rounded-lg">
       <div className="p-3 border-b">
@@ -42,9 +54,7 @@ const PricingInfo = () => {
             name="discount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-semibold">
-                  الخصم
-                </FormLabel>
+                <FormLabel className="text-base font-semibold">الخصم</FormLabel>
                 <FormControl>
                   <Input
                     className="text-sm"
@@ -55,6 +65,37 @@ const PricingInfo = () => {
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div>
+          <FormField
+            control={control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">
+                  تاريخ انتهاء الخصم
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm"
+                    type="date"
+                    disabled={!isActive}
+                    value={
+                      isActive && field.value
+                        ? new Date(field.value).toISOString().split("T")[0]
+                        : ""
+                    }
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                </FormControl>
+                <FormDescription className="text-sm text-muted-foreground">
+                  المدة الافتراضية للخصم هي يوم واحد في حال لم يتم تحديد تاريخ
+                  انتهاء.
+                </FormDescription>
               </FormItem>
             )}
           />
