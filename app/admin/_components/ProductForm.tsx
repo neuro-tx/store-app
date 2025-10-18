@@ -12,7 +12,7 @@ import BasicInfo from "./BasicInfo";
 import PricingInfo from "./PricingInfo";
 import DescriptionInfo from "./DescriptionInfo";
 
-const ProductForm = () => {
+const ProductForm = ({ defaultValues }: { defaultValues: ProductType }) => {
   const [submiting, startSubmit] = useTransition();
   const onSubmit = (data: any) => {
     startSubmit(async () => {
@@ -23,26 +23,14 @@ const ProductForm = () => {
   const methods = useForm();
   const form = useForm<ProductType>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: "",
-      category: "",
-      description: "",
-      images: [],
-      capacity: "",
-      discount: 0,
-      price: 0,
-      brand: "",
-      isAvailable: true,
-      isFeatured: false,
-    },
+    defaultValues: defaultValues
   });
-  
+
   return (
     <div>
       <FormProvider {...methods}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            
             <ImagesInfo />
             <BasicInfo />
             <PricingInfo />

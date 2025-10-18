@@ -4,8 +4,22 @@ import ProductForm from "../_components/ProductForm";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { MoveLeft } from "lucide-react";
 import { TooltipContent } from "@radix-ui/react-tooltip";
+import { ProductType } from "@/lib/product-schema";
 
 const ProductPAdmin = () => {
+  const defaultVal : ProductType = {
+    name: "",
+    category: "",
+    description: "",
+    images: [],
+    capacity: "",
+    discount: 0,
+    price: 0,
+    brand: "",
+    isAvailable: true,
+    isFeatured: false,
+    endDate: null
+  };
   return (
     <div className="w-full min-h-svh overflow-x-hidden">
       <div className="container mx-auto">
@@ -31,7 +45,7 @@ const ProductPAdmin = () => {
               </Tooltip>
             </div>
 
-            <ProductForm />
+            <ProductForm defaultValues={defaultVal}/>
           </div>
         </div>
       </div>

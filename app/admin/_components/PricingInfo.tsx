@@ -1,5 +1,10 @@
-"use client";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   FormControl,
   FormDescription,
@@ -18,14 +23,17 @@ const PricingInfo = () => {
   const isActive = discount > 0;
 
   return (
-    <section className="border rounded-lg">
-      <div className="p-3 border-b">
-        <h2 className="text-lg font-semibold text-muted-foreground">
+    <Card className="border rounded-lg">
+      <CardHeader className="border-b">
+        <CardTitle className="font-cairo font-semibold text-lg">
           تفاصيل التسعير
-        </h2>
-      </div>
+        </CardTitle>
+        <CardDescription className="text-sm text-muted-foreground">
+          أدخل سعر المنتج، نسبة الخصم، وتاريخ انتهاء الخصم إن وجد.
+        </CardDescription>
+      </CardHeader>
 
-      <div className="p-4 space-y-4">
+      <CardContent className="space-y-4">
         <div className="grid md:grid-cols-2 gap-3 items-start">
           <FormField
             control={control}
@@ -100,8 +108,8 @@ const PricingInfo = () => {
             )}
           />
         </div>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 };
 

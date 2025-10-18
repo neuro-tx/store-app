@@ -1,4 +1,17 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import React from "react";
 import { useFormContext } from "react-hook-form";
@@ -6,14 +19,18 @@ import { useFormContext } from "react-hook-form";
 const DescriptionInfo = () => {
   const { control } = useFormContext();
   return (
-    <section className="border rounded-lg">
-      <div className="p-3 border-b">
-        <h2 className="text-lg font-semibold text-muted-foreground">
-          المعلومات الأساسية
-        </h2>
-      </div>
+    <Card className="border rounded-lg">
+      <CardHeader className="border-b">
+        <CardTitle className="font-cairo font-semibold text-lg">
+          وصف المنتج
+        </CardTitle>
+        <CardDescription className="text-sm text-muted-foreground">
+          اكتب وصفًا دقيقًا وجذّابًا يوضّح مميزات المنتج وفوائده وطريقة
+          استخدامه.
+        </CardDescription>
+      </CardHeader>
 
-      <div className="p-4">
+      <CardContent>
         <FormField
           control={control}
           name="description"
@@ -33,8 +50,8 @@ const DescriptionInfo = () => {
             </FormItem>
           )}
         />
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 };
 

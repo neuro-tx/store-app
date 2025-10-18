@@ -7,8 +7,14 @@ import { MoveLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import CategoryForm from "../_components/CategoryForm";
+import { CategoryType } from "@/lib/category-schema";
 
 const CategoriesAdmin = () => {
+  const defaultVals: CategoryType = {
+    name: "",
+    description: "",
+    image: "",
+  };
   return (
     <div className="w-full min-h-svh overflow-x-hidden">
       <div className="container mx-auto">
@@ -34,7 +40,7 @@ const CategoriesAdmin = () => {
               </Tooltip>
             </div>
 
-            <CategoryForm />
+            <CategoryForm defaultValues={defaultVals} />
           </div>
         </div>
       </div>

@@ -20,10 +20,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader, Plus } from "lucide-react";
 import React, { useTransition } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Uploader from "./Uploader";
+import { categorySchema, CategoryType } from "@/lib/category-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const CategoryForm = () => {
+const CategoryForm = ({defaultValues} : {defaultValues : CategoryType}) => {
   const [submiting, startSubmit] = useTransition();
   const onSubmit = (data: any) => {
     startSubmit(async () => {
@@ -32,7 +34,10 @@ const CategoryForm = () => {
   };
 
   const methods = useForm();
-  const form = useForm({});
+  const form = useForm<CategoryType>({
+    resolver: zodResolver(categorySchema),
+    defaultValues: defaultValues,
+  });
   return (
     <div>
       <Form {...form}>

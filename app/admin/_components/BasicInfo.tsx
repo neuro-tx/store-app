@@ -1,4 +1,11 @@
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   FormControl,
   FormDescription,
   FormField,
@@ -22,14 +29,18 @@ import { useFormContext } from "react-hook-form";
 const BasicInfo = () => {
   const { control } = useFormContext();
   return (
-    <section className="border rounded-lg">
-      <div className="p-3 border-b">
-        <h2 className="text-lg font-semibold text-muted-foreground">
+    <Card>
+      <CardHeader className="border-b">
+        <CardTitle className="font-cairo font-semibold text-lg">
           المعلومات الأساسية
-        </h2>
-      </div>
+        </CardTitle>
+        <CardDescription className="text-sm text-muted-foreground">
+          أضف أو عدّل التفاصيل الأساسية الخاصة بالمنتج مثل الاسم، الفئة، والسعة
+          أو العلامة التجارية.
+        </CardDescription>
+      </CardHeader>
 
-      <div className="p-4 space-y-4">
+      <CardContent className="space-y-4">
         <div className="grid gap-3 md:grid-cols-2 w-full items-start">
           <FormField
             control={control}
@@ -178,8 +189,8 @@ const BasicInfo = () => {
             />
           </div>
         </div>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 };
 
