@@ -19,7 +19,21 @@ interface FileProps {
   isDeleting?: boolean;
 }
 
-const Uploader = ({ onChange }: { onChange?: (url: string[]) => void }) => {
+type Dir = "products" | "categories"
+
+interface UploaderProps {
+  multiple?: boolean;
+  dir: Dir;
+  maxFiles: number;
+  onChange?: (value: string | string[]) => void;
+}
+
+const Uploader = ({
+  multiple = false,
+  maxFiles,
+  onChange,
+  dir
+}: UploaderProps) => {
   const [files, setFiles] = useState<Array<FileProps>>([]);
   const { getValues } = useFormContext();
 
@@ -37,7 +51,7 @@ const Uploader = ({ onChange }: { onChange?: (url: string[]) => void }) => {
         toast.error("حجم الملف كبير جدًا، الحد الأقصى المسموح هو 5 ميجابايت.");
         break;
       case "too-many-files":
-        toast.error("يمكنك رفع 3 صور كحد أقصى فقط.");
+        toast.error(`يمكنك رفع ${maxFiles} صور كحد أقصى فقط.`);
         break;
       default:
         toast.error("حدث خطأ ما، يرجى المحاولة مرة أخرى.");
@@ -57,9 +71,10 @@ const Uploader = ({ onChange }: { onChange?: (url: string[]) => void }) => {
       if (acceptedFiles.length === 0) return;
 
       const currentFiles = files ?? [];
+      const totalAfterAdd = currentFiles.length + acceptedFiles.length;
 
-      if (currentFiles.length > 3) {
-        toast.error(`يمكنك رفع 3 صور كحد أقصى فقط.`);
+      if (totalAfterAdd > maxFiles) {
+        toast.error(`لا يمكنك رفع أكثر من ${maxFiles} صور.`);
         return;
       }
 
@@ -76,8 +91,24 @@ const Uploader = ({ onChange }: { onChange?: (url: string[]) => void }) => {
         (url): url is string => url !== undefined
       );
 
-      const existingUrls = getValues("images") || [];
-      onChange?.([...existingUrls, ...validNewUrls]);
+      let existingUrls: string[] = [];
+
+      if (multiple) {
+        try {
+          existingUrls = getValues("images") || [];
+        } catch {
+          existingUrls = [];
+        }
+      } else {
+        existingUrls = [];
+      }
+
+      const res = [...existingUrls, ...validNewUrls];
+      if (multiple) {
+        onChange?.(res);
+      } else {
+        onChange?.(res[0]);
+      }
     },
     [onChange, files]
   );
@@ -87,28 +118,42 @@ const Uploader = ({ onChange }: { onChange?: (url: string[]) => void }) => {
     accept: {
       "image/*": [],
     },
-    multiple: true,
-    maxFiles: 3,
+    multiple: multiple,
+    maxFiles: maxFiles,
     maxSize: 5 * 1024 * 1024,
   });
 
   const handleUpload = async (file: File) => {
-    const publicUrl = await uploadFile(file, setFiles);
+    const publicUrl = await uploadFile(file, setFiles ,dir);
     return publicUrl;
   };
 
   const handleDelete = async (file: FileProps) => {
     try {
-      const currentUrls = getValues("images") || [];
-      const remainingUrls = await deleteFile(file, setFiles, currentUrls);
-      onChange?.(remainingUrls);
+      let currentValue: string | string[] = [];
+      try {
+        currentValue = getValues("images") || [];
+      } catch {
+        currentValue = multiple ? [] : "";
+      }
+
+      if (multiple) {
+        const urls = Array.isArray(currentValue) ? currentValue : [];
+        const remainingUrls = await deleteFile(file, setFiles, urls);
+        onChange?.(remainingUrls);
+      } else {
+        await deleteFile(file, setFiles);
+        onChange?.("");
+      }
     } catch (error) {
       console.error("Delete failed:", error);
     }
   };
 
+  const layout = maxFiles === 3 ? "grid gap-3 sm:grid-cols-3 w-full" : "grid w-full"
+
   return (
-    <div className="space-y-5">
+    <div className={cn(maxFiles === 3 ? "space-y-5" : "grid sm:grid-cols-2 gap-3")}>
       <div
         {...getRootProps()}
         className={cn(
@@ -136,11 +181,11 @@ const Uploader = ({ onChange }: { onChange?: (url: string[]) => void }) => {
       </div>
 
       {files && (
-        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 w-full">
+        <div className={layout}>
           {files.map((f, i) => (
             <div
               key={i}
-              className="border w-full h-44 relative rounded-sm overflow-hidden"
+              className={cn("border w-full h-44 relative rounded-sm overflow-hidden" ,maxFiles === 1 && "h-52 rounded-lg")}
             >
               <Image
                 src={f.objectUrl}

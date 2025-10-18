@@ -46,8 +46,25 @@ const CategoryForm = () => {
                 قم برفع صورة تعبّر عن الفئة لعرضها في واجهة المتجر.
               </CardDescription>
             </CardHeader>
+
             <CardContent>
-                <Uploader />
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Uploader
+                        multiple={false}
+                        dir="categories"
+                        maxFiles={1}
+                        onChange={(value) => field.onChange(value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </CardContent>
           </Card>
 

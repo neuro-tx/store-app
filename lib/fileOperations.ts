@@ -9,11 +9,18 @@ interface FileProps {
   isDeleting?: boolean;
 }
 
+export interface DeleteFromS3Result {
+  success: boolean;
+  message: string;
+  publicUrl?: string;
+}
+
 type SetFilesFunction = React.Dispatch<React.SetStateAction<FileProps[]>>;
 
 export const uploadFile = async (
   file: File,
-  setFiles: SetFilesFunction
+  setFiles: SetFilesFunction ,
+  dirName : string
 ): Promise<string | undefined> => {
   const updateFileState = (updates: Partial<FileProps>) => {
     setFiles((prev) =>
@@ -32,6 +39,7 @@ export const uploadFile = async (
         fileName: file.name,
         contentType: file.type,
         size: file.size,
+        dirName
       }),
     });
 
@@ -73,9 +81,10 @@ export const uploadFile = async (
 export const deleteFile = async (
   file: FileProps,
   setFiles: SetFilesFunction,
-  imagesUlr: string[]
+  imagesUlr?: string[]
 ): Promise<string[]> => {
-  if (!file?.key || file.isError) return imagesUlr;
+  const currentUrls = Array.isArray(imagesUlr) ? imagesUlr : [];
+  if (!file?.key || file.isError) return currentUrls;
 
   const updateFileState = (updates: Partial<FileProps>) => {
     setFiles((prev) =>
@@ -86,32 +95,60 @@ export const deleteFile = async (
   updateFileState({ isDeleting: true, isUploading: false, isError: false });
 
   try {
-    const res = await fetch("/api/s3/delete", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key: file.key }),
-    });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || "Failed to delete file");
+    const res = await deleteFromS3(file.key);
+    if (!res.success) {
+      toast.error(res.message);
+      throw new Error("faild to delete the file");
     }
 
-    const { publicUrl } = await res.json();
-    toast.success("تم حذف الملف بنجاح");
-
+    toast.success(res.message);
     setFiles((prev) => prev.filter((f) => f.key !== file.key));
 
     if (file.objectUrl) {
       URL.revokeObjectURL(file.objectUrl);
     }
 
-    const remainingUrls = imagesUlr.filter((url) => url !== publicUrl);
+    const remainingUrls = currentUrls.filter((url) => url !== res.publicUrl);
     return remainingUrls;
   } catch (error) {
     toast.error("فشل في حذف الملف");
     updateFileState({ isDeleting: false, isError: true });
 
     throw error;
+  }
+};
+
+export const deleteFromS3 = async (
+  key: string
+): Promise<DeleteFromS3Result> => {
+  if (!key) {
+    return { success: false, message: "المفتاح الخاص بالملف مفقود." };
+  }
+
+  try {
+    const res = await fetch("/api/s3/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key }),
+    });
+
+    if (!res.ok) {
+      return {
+        success: false,
+        message: "فشل حذف الملف من خادم التخزين (S3).",
+      };
+    }
+
+    const data = await res.json();
+    return {
+      success: true,
+      message: "تم حذف الملف بنجاح.",
+      publicUrl: data.publicUrl,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "حدث خطأ غير متوقع أثناء حذف الملف.",
+    };
   }
 };

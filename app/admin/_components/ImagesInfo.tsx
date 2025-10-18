@@ -20,7 +20,7 @@ const ImagesInfo = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Uploader onChange={(files) => field.onChange(files)} />
+                <Uploader multiple dir="products" maxFiles={3} onChange={(files) => field.onChange(files)} />
               </FormControl>
               <FormMessage />
             </FormItem>

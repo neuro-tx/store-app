@@ -8,6 +8,7 @@ const fileUploadSchema = z.object({
   fileName: z.string().min(1),
   contentType: z.string().min(1),
   size: z.number(),
+  dirName: z.string()
 });
 
 export async function POST(req: Request) {
@@ -20,8 +21,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "invalid file data" }, { status: 400 });
     }
 
-    const { fileName, size, contentType } = validate.data;
-    const key = `products/${Date.now()}-${fileName}`;
+    const { fileName, size, contentType ,dirName } = validate.data;
+    const key = `${dirName}/${Date.now()}-${fileName}`;
     console.log(fileName, size, contentType);
 
     const command = new PutObjectCommand({
