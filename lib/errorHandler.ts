@@ -19,10 +19,8 @@ export function errorHandler<T extends (...args: any[]) => Promise<any>>(
 
       // Handle MongoDB duplicate key errors
       if ((error as any).code === 11000) {
-        const field = Object.keys((error as any).keyPattern || {})[0];
-        const message = field
-          ? `القيمة في الحقل "${field}" موجودة بالفعل.`
-          : "تم العثور على قيمة مكررة.";
+        const message =
+          "تم رفض العملية لأن هذه البيانات مسجلة مسبقًا. يُرجى استخدام قيم مختلفة أو التحقق من وجود العنصر مسبقًا.";
         return fail(409, message) as ReturnType<T>;
       }
 

@@ -5,7 +5,7 @@ import { deleteFile, uploadFile } from "@/lib/fileOperations";
 import { cn } from "@/lib/utils";
 import { ImageUp, Loader2, TriangleAlert, X } from "lucide-react";
 import Image from "next/image";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
@@ -19,23 +19,35 @@ interface FileProps {
   isDeleting?: boolean;
 }
 
-type Dir = "products" | "categories"
+type Dir = "products" | "categories";
 
 interface UploaderProps {
   multiple?: boolean;
   dir: Dir;
   maxFiles: number;
   onChange?: (value: string | string[]) => void;
+  clear?: boolean;
 }
 
 const Uploader = ({
   multiple = false,
   maxFiles,
   onChange,
-  dir
+  dir,
+  clear = false,
 }: UploaderProps) => {
   const [files, setFiles] = useState<Array<FileProps>>([]);
   const { getValues } = useFormContext();
+
+  useEffect(() => {
+    if (clear && files.length > 0) {
+      files.forEach((f) => {
+        if (f.objectUrl) URL.revokeObjectURL(f.objectUrl);
+      });
+      setFiles([]);
+      onChange?.([]);
+    }
+  }, [clear]);
 
   const handleRejection = (rejections: FileRejection[]) => {
     const error = rejections[0]?.errors[0];
@@ -124,7 +136,7 @@ const Uploader = ({
   });
 
   const handleUpload = async (file: File) => {
-    const publicUrl = await uploadFile(file, setFiles ,dir);
+    const publicUrl = await uploadFile(file, setFiles, dir);
     return publicUrl;
   };
 
@@ -150,10 +162,13 @@ const Uploader = ({
     }
   };
 
-  const layout = maxFiles === 3 ? "grid gap-3 sm:grid-cols-3 w-full" : "grid w-full"
+  const layout =
+    maxFiles === 3 ? "grid gap-3 sm:grid-cols-3 w-full" : "grid w-full";
 
   return (
-    <div className={cn(maxFiles === 3 ? "space-y-5" : "grid sm:grid-cols-2 gap-3")}>
+    <div
+      className={cn(maxFiles === 3 ? "space-y-5" : "grid sm:grid-cols-2 gap-3")}
+    >
       <div
         {...getRootProps()}
         className={cn(
@@ -185,7 +200,10 @@ const Uploader = ({
           {files.map((f, i) => (
             <div
               key={i}
-              className={cn("border w-full h-44 relative rounded-sm overflow-hidden" ,maxFiles === 1 && "h-52 rounded-lg")}
+              className={cn(
+                "border w-full h-44 relative rounded-sm overflow-hidden",
+                maxFiles === 1 && "h-52 rounded-lg"
+              )}
             >
               <Image
                 src={f.objectUrl}

@@ -19,21 +19,42 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader, Plus } from "lucide-react";
-import React, { useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import Uploader from "./Uploader";
 import { categorySchema, CategoryType } from "@/lib/category-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
-const CategoryForm = ({defaultValues} : {defaultValues : CategoryType}) => {
+const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
   const [submiting, startSubmit] = useTransition();
+  const [clearUploader, setclearUploader] = useState<boolean>(false);
+
   const onSubmit = (data: any) => {
     startSubmit(async () => {
-      console.log(data);
+      try {
+        setclearUploader(false);
+        const res = await fetch("/api/category", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        if (!res.ok) {
+          toast.error(result.message || "حدث خطأ أثناء إنشاء التصنيف");
+          return;
+        }
+
+        toast.success(result.message || "تم إنشاء التصنيف بنجاح");
+
+        form.reset(defaultValues);
+        setTimeout(() => setclearUploader(true), 300);
+      } catch (error) {
+        toast.error("حدث خطأ أثناء إنشاء التصنيف");
+      }
     });
   };
 
-  const methods = useForm();
   const form = useForm<CategoryType>({
     resolver: zodResolver(categorySchema),
     defaultValues: defaultValues,
@@ -63,6 +84,7 @@ const CategoryForm = ({defaultValues} : {defaultValues : CategoryType}) => {
                         multiple={false}
                         dir="categories"
                         maxFiles={1}
+                        clear={clearUploader}
                         onChange={(value) => field.onChange(value)}
                       />
                     </FormControl>
@@ -130,7 +152,7 @@ const CategoryForm = ({defaultValues} : {defaultValues : CategoryType}) => {
           <Button
             type="submit"
             disabled={submiting}
-            className="w-full md:w-fit bg-primary text-white hover:bg-primary/90 cursor-pointer"
+            className="w-full md:w-sm bg-primary text-white hover:bg-primary/90 cursor-pointer"
           >
             {submiting ? (
               <div className="flex items-center gap-2 text-base">
