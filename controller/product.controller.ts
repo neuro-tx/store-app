@@ -31,7 +31,7 @@ const updateProduct = async (id: string, request: Request) => {
   if (!validate.success) throw new Error(validate.error.message);
 
   const newData = validate.data;
-  return await productServices.createProduct(newData);
+  return await productServices.updateProduct(id ,newData);
 };
 
 const deleteProduct = async (id: string) => {
