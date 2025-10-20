@@ -1,5 +1,5 @@
 import { categorySchema } from "@/lib/category-schema";
-import { success } from "@/lib/states";
+import { fail } from "@/lib/states";
 import { categoryService } from "@/services/category.service";
 import { isValidObjectId } from "mongoose";
 
@@ -11,21 +11,22 @@ const createCat = async (request: Request) => {
   const data = await request.json();
 
   const validate = categorySchema.safeParse(data);
-  if (!validate.success) throw new Error(validate.error.message);
+  if (!validate.success){
+    return fail(400, validate.error?.message || "بيانات غير صالحة.");
+  }
 
   const catData = validate.data;
   return await categoryService.createCategory(catData);
 };
 
 const getCatById = async (id: string) => {
-  if(!isValidObjectId(id)) throw new Error("Invalid category ID format");
+  if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
   return await categoryService.getCategoryById(id);
 };
 
-const updateCat = async (request: Request) => {
-  const { id, ...data } = await request.json();
-
-  if(!isValidObjectId(id)) throw new Error("Invalid category ID format");
+const updateCat = async (id: string ,request: Request) => {
+  const data = await request.json();
+  if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
 
   const validate = categorySchema.safeParse(data);
   if (!validate.success) throw new Error(validate.error.message);
@@ -35,7 +36,7 @@ const updateCat = async (request: Request) => {
 };
 
 const deleteCat = async (id: string) => {
-  if(!isValidObjectId(id)) throw new Error("Invalid category ID format");
+  if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
 
   return await categoryService.deleteCategory(id);
 };
