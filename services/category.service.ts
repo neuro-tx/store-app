@@ -5,27 +5,22 @@ import dbConnect from "@/lib/db";
 import { fail, success } from "@/lib/states";
 import { Category } from "@/model/category.model";
 
+await dbConnect();
+
 const getCategories = async () => {
-  await dbConnect();
-
   const categories = await Category.find().lean();
-  if (!categories.length) return success([], 404, "لا توجد فئات حتى الآن.");
-
+  if (!categories) return success([], 404, "لا توجد فئات حتى الآن.");
   return success(categories, 200);
 };
 
 const getCategoryById = async (id: string) => {
-  await dbConnect();
-
-  const result = await Category.findById(id);
+  const result = await Category.findById(id).lean();
   if (!result) return fail(404, "الفئة غير موجودة");
 
   return success(result, 200);
 };
 
 const createCategory = async (data: CategoryType) => {
-  await dbConnect();
-
   const newCat = await Category.create(data);
   if (!newCat) return fail(400, "فشل في إضافة الفئة الجديدة");
 
@@ -33,24 +28,20 @@ const createCategory = async (data: CategoryType) => {
 };
 
 const updateCategory = async (id: string, data: CategoryType) => {
-  await dbConnect();
-
   const target = await Category.findByIdAndUpdate(
     id,
     { $set: data },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true, lean: true }
   );
 
-  if (!target) return success(null, 404, "الفئة غير موجودة أو فشل التحديث");
+  if (!target) return fail(404, "الفئة غير موجودة أو فشل التحديث");
 
   return success(target, 200, "تم تحديث الفئة بنجاح");
 };
 
 const deleteCategory = async (id: string) => {
-  await dbConnect();
-
   const result = await Category.deleteOne({ _id: id });
-  if (result.deletedCount === 0) return success(null, 200, "الفئة غير موجودة");
+  if (result.deletedCount === 0) return fail(404, "الفئة غير موجودة");
 
   return success(null, 200, "تم حذف الفئة بنجاح");
 };
