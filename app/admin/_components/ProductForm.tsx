@@ -39,7 +39,7 @@ const ProductForm = ({ defaultValues }: { defaultValues: ProductType }) => {
             <Button
               type="submit"
               disabled={submiting}
-              className="w-full md:w-fit bg-primary text-white hover:bg-primary/90 cursor-pointer"
+              className="w-full md:w-sm bg-primary text-white hover:bg-primary/90 cursor-pointer"
             >
               {submiting ? (
                 <div className="flex items-center gap-2 text-base">

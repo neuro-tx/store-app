@@ -22,12 +22,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { categories } from "@/data/admin";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { toast } from "sonner";
 
 const BasicInfo = () => {
   const { control } = useFormContext();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoader] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoader(true);
+        const res = await fetch("/api/category", { cache: "no-store" });
+        const data = await res.json();
+        setCategories(data.data);
+      } catch (err) {
+        toast.error("حدث خطأ أثناء تحميل الفئات");
+        console.error("Error fetching categories:", err);
+      } finally {
+        setLoader(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
   return (
     <Card>
       <CardHeader className="border-b">
@@ -74,19 +94,29 @@ const BasicInfo = () => {
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="اختر الفئة" />
+                      <SelectValue
+                        placeholder={
+                          loading ? "جارِ تحميل الفئات..." : "اختر الفئة"
+                        }
+                      />
                     </SelectTrigger>
-                    <SelectContent className="max-h-72">
-                      {categories.map((cat) => (
-                        <SelectItem
-                          key={cat.id}
-                          value={cat.id}
-                          className="w-full flex justify-end"
-                        >
-                          {cat.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
+                    {loading ? (
+                      <SelectContent className="max-h-72">
+                        <p className="text-center p-1 text-sm">جاري التحميل...</p>
+                      </SelectContent>
+                    ) : (
+                      <SelectContent className="max-h-72">
+                        {categories.map((cat: any) => (
+                          <SelectItem
+                            key={cat.slug}
+                            value={cat._id}
+                            className="w-full flex justify-end"
+                          >
+                            {cat.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    )}
                   </Select>
                 </FormControl>
                 <FormMessage />

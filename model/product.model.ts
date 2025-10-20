@@ -46,13 +46,13 @@ const ProductSchema = new Schema<IProduct>(
     },
     isAvailable: { type: Boolean, default: true, index: true },
     isFeatured: { type: Boolean, default: false, index: true },
-    brand: { type: String, trim: true },
+    brand: { type: String, trim: true, default: "" },
     discount: {
       type: Number,
       default: 0,
       min: [0, "لا يمكن أن تكون نسبة الخصم سالبة."],
     },
-    capacity: { type: String, trim: true },
+    capacity: { type: String, trim: true, default: "" },
     category: {
       type: Schema.Types.ObjectId,
       ref: "Category",
@@ -61,11 +61,10 @@ const ProductSchema = new Schema<IProduct>(
     hasDiscount: { type: Boolean, default: false },
     endDate: {
       type: Date,
+      default: null,
       validate: {
-        validator: function (this: IProduct, value: Date) {
-          if (this.discount > 0 && !value) {
-            return true;
-          }
+        validator: function (this: IProduct, value: Date | null) {
+          if (this.discount > 0 && !value) return false;
           return true;
         },
         message: "يجب تحديد تاريخ انتهاء الخصم عند وجود خصم.",
