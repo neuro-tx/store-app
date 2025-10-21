@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, List } from "lucide-react";
+import { LayoutDashboard, Package, List, Home } from "lucide-react";
 
 export const ADMIN_LINKS = [
   {
@@ -7,15 +7,20 @@ export const ADMIN_LINKS = [
     icon: LayoutDashboard,
   },
   {
-    title: "المنتجات",
-    path: "/admin/products",
+    title: "إضافة منتج",
+    path: "/admin/add-products",
     icon: Package,
   },
   {
-    title: "الفئات",
-    path: "/admin/categories",
+    title: "إضافة فئة",
+    path: "/admin/add-categories",
     icon: List,
   },
+  {
+    title: "الصفحة الرئيسية",
+    path: "/",
+    icon: Home,
+  }
 ] as const;
 
 export const categories = [
