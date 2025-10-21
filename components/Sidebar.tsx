@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { TreePalm } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useTheme } from "next-themes";
@@ -15,6 +15,9 @@ const Sidebar = () => {
   const path = usePathname();
   const { isOpen } = useSidebar();
   const { setTheme, theme } = useTheme();
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <div
@@ -56,19 +59,24 @@ const Sidebar = () => {
           </div>
         </div>
         <div className="w-full p-2 mb-6">
-          <div className="flex items-center gap-2 p-2 rounded-md">
-            <Switch
-              dir="ltr"
-              id="theme-toggle"
-              checked={theme === "dark"}
-              onCheckedChange={(checked) =>
-                setTheme(checked ? "dark" : "light")
-              }
-            />
-            <Label htmlFor="theme-toggle" className="font-medium text-muted-foreground">
-              {theme === "dark" ? "الوضع الليلي" : "الوضع النهاري"}
-            </Label>
-          </div>
+          {mounted && (
+            <div className="flex items-center gap-2 p-2 rounded-md">
+              <Switch
+                dir="ltr"
+                id="theme-toggle"
+                checked={theme === "dark"}
+                onCheckedChange={(checked) =>
+                  setTheme(checked ? "dark" : "light")
+                }
+              />
+              <Label
+                htmlFor="theme-toggle"
+                className="font-medium text-muted-foreground"
+              >
+                {theme === "dark" ? "الوضع الليلي" : "الوضع النهاري"}
+              </Label>
+            </div>
+          )}
         </div>
       </div>
     </div>
