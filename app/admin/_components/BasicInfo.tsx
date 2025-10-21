@@ -28,7 +28,7 @@ import { toast } from "sonner";
 
 const BasicInfo = () => {
   const { control } = useFormContext();
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoader] = useState(true);
 
   useEffect(() => {
@@ -100,13 +100,14 @@ const BasicInfo = () => {
                         }
                       />
                     </SelectTrigger>
-                    {loading ? (
-                      <SelectContent className="max-h-72">
-                        <p className="text-center p-1 text-sm">جاري التحميل...</p>
-                      </SelectContent>
-                    ) : (
-                      <SelectContent className="max-h-72">
-                        {categories.map((cat: any) => (
+
+                    <SelectContent className="max-h-72">
+                      {loading ? (
+                        <p className="text-center p-1 text-sm">
+                          جارِ التحميل ...
+                        </p>
+                      ) : categories && categories.length > 0 ? (
+                        categories.map((cat: any) => (
                           <SelectItem
                             key={cat.slug}
                             value={cat._id}
@@ -114,9 +115,13 @@ const BasicInfo = () => {
                           >
                             {cat.name}
                           </SelectItem>
-                        ))}
-                      </SelectContent>
-                    )}
+                        ))
+                      ) : (
+                        <div className="text-center p-1.5 text-sm text-muted-foreground">
+                          لا توجد فئات حالياً
+                        </div>
+                      )}
+                    </SelectContent>
                   </Select>
                 </FormControl>
                 <FormMessage />
