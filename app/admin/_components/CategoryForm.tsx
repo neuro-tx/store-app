@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader, Plus } from "lucide-react";
-import React, { useState, useTransition } from "react";
+import { Loader, Plus, RefreshCcw } from "lucide-react";
+import React, { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import Uploader from "./Uploader";
 import { categorySchema, CategoryType } from "@/lib/category-schema";
@@ -33,7 +33,6 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
   const onSubmit = (data: any) => {
     startSubmit(async () => {
       try {
-        setclearUploader(false);
         const res = await fetch("/api/category", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -46,14 +45,26 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
         }
 
         toast.success(result.message || "تم إنشاء التصنيف بنجاح");
-
-        form.reset(defaultValues);
-        setTimeout(() => setclearUploader(true), 300);
       } catch (error) {
         toast.error("حدث خطأ أثناء إنشاء التصنيف");
       }
     });
   };
+
+  const handleReset = () => {
+    setclearUploader(true);
+    form.reset(defaultValues);
+  };
+
+  useEffect(() => {
+    if (clearUploader) {
+      const timer = setTimeout(() => {
+        setclearUploader(false);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [clearUploader]);
 
   const form = useForm<CategoryType>({
     resolver: zodResolver(categorySchema),
@@ -149,23 +160,36 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
             </CardContent>
           </Card>
 
-          <Button
-            type="submit"
-            disabled={submiting}
-            className="w-full md:w-sm bg-primary text-white hover:bg-primary/90 cursor-pointer"
-          >
-            {submiting ? (
-              <div className="flex items-center gap-2 text-base">
-                <Loader className="animate-spin" />
-                <span>جارٍ الإنشاء...</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Plus />
-                <span>إنشاء فئة</span>
-              </div>
-            )}
-          </Button>
+          <div className="grid gap-3 md:grid-cols-2 items-baseline">
+            <Button
+              type="submit"
+              disabled={submiting}
+              className="w-full bg-primary text-white hover:bg-primary/90 cursor-pointer"
+            >
+              {submiting ? (
+                <div className="flex items-center gap-2 text-base">
+                  <Loader className="animate-spin" />
+                  <span>جارٍ الإنشاء...</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Plus />
+                  <span>إنشاء فئة</span>
+                </div>
+              )}
+            </Button>
+
+            <Button
+              type="button"
+              disabled={submiting}
+              variant="destructive"
+              className="w-full flex items-center justify-center gap-2 cursor-pointer hover:opacity-90"
+              onClick={() => handleReset()}
+            >
+              <RefreshCcw />
+              إعادة ضبط النموذج
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

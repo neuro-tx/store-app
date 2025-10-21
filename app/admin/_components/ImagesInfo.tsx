@@ -15,7 +15,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const ImagesInfo = (cleaner?: any) => {
+interface ImagesInfoProps {
+  cleaner: boolean;
+}
+
+const ImagesInfo = ({ cleaner }: ImagesInfoProps) => {
   const { control } = useFormContext();
   return (
     <Card>
@@ -39,7 +43,7 @@ const ImagesInfo = (cleaner?: any) => {
                   multiple
                   dir="products"
                   maxFiles={3}
-                  clear={cleaner as boolean}
+                  clear={cleaner}
                   onChange={(files) => field.onChange(files)}
                 />
               </FormControl>
