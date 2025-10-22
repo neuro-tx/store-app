@@ -17,6 +17,8 @@ export interface DeleteFromS3Result {
 
 type SetFilesFunction = React.Dispatch<React.SetStateAction<FileProps[]>>;
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 export const uploadFile = async (
   file: File,
   setFiles: SetFilesFunction ,
@@ -32,7 +34,7 @@ export const uploadFile = async (
   setFiles((prev) => prev.filter((f) => !f.isError || f.file === file));
 
   try {
-    const res = await fetch("/api/s3/upload", {
+    const res = await fetch(`${BASE_URL}/api/s3/upload`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -126,7 +128,7 @@ export const deleteFromS3 = async (
   }
 
   try {
-    const res = await fetch("/api/s3/delete", {
+    const res = await fetch(`${BASE_URL}/api/s3/delete`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ key }),
@@ -146,6 +148,7 @@ export const deleteFromS3 = async (
       publicUrl: data.publicUrl,
     };
   } catch (error) {
+    console.log(error)
     return {
       success: false,
       message: "حدث خطأ غير متوقع أثناء حذف الملف.",

@@ -4,6 +4,8 @@ import { CategoryType } from "@/lib/category-schema";
 import dbConnect from "@/lib/db";
 import { fail, success } from "@/lib/states";
 import { Category } from "@/model/category.model";
+import { extractKey } from "@/lib/utils";
+import { deleteFromS3 } from "@/lib/fileOperations";
 
 await dbConnect();
 
@@ -40,10 +42,35 @@ const updateCategory = async (id: string, data: CategoryType) => {
 };
 
 const deleteCategory = async (id: string) => {
-  const result = await Category.deleteOne({ _id: id });
-  if (result.deletedCount === 0) return fail(404, "الفئة غير موجودة");
+  try {
+    const cat = await getCategoryById(id);
+    const res = await cat.json();
+    if (!res?.data) {
+      return fail(404, "الفئة غير موجودة");
+    }
 
-  return success(null, 200, "تم حذف الفئة بنجاح");
+    const key = extractKey(res.data.image);
+    if (!key) {
+      return fail(400, "لم يتم العثور على مفتاح الصورة");
+    }
+    console.log("the img url: ", res.data.image);
+    console.log("the key: ", key);
+
+    const delRes = await deleteFromS3(key);
+    if (!delRes?.success) {
+      return fail(400, "فشل حذف الصورة من التخزين السحابي");
+    }
+
+    const result = await Category.deleteOne({ _id: id });
+    if (result.deletedCount === 0) {
+      return fail(404, "الفئة غير موجودة");
+    }
+
+    return success(null, 200, "تم حذف الفئة بنجاح");
+  } catch (error) {
+    console.error("❌ Error deleting category:", error);
+    return fail(500, "حدث خطأ أثناء حذف الفئة");
+  }
 };
 
 export const categoryService = {

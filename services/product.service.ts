@@ -3,6 +3,8 @@ import "server-only";
 import dbConnect from "@/lib/db";
 import { fail, success } from "@/lib/states";
 import { Product } from "@/model/product.model";
+import { extractKey } from "@/lib/utils";
+import { deleteFromS3 } from "@/lib/fileOperations";
 
 await dbConnect();
 
@@ -58,10 +60,33 @@ const updateProduct = async (id: string, data: any) => {
 };
 
 const deleteProduct = async (id: string) => {
-  const result = await Product.deleteOne({ _id: id });
-  if (result.deletedCount === 0) return success(null, 404, "المنتج غير موجود");
+  try {
+    const cat = await getProductById(id);
+    const res = await cat.json();
+    if (!res?.data) {
+      return fail(404, "المنتج غير موجود");
+    }
 
-  return success(null, 201, "تم حذف المنتج بنجاح");
+    const deletePromises = res.data.images.map((img: string) =>
+      deleteFromS3(extractKey(img))
+    );
+
+    const deleteResults = await Promise.allSettled(deletePromises);
+
+    const failed = deleteResults.filter((r) => r.status === "rejected");
+    if (failed.length > 0) {
+      console.warn("⚠️ بعض الصور لم تُحذف من S3");
+    }
+
+    const result = await Product.deleteOne({ _id: id });
+    if (result.deletedCount === 0)
+      return success(null, 404, "المنتج غير موجود");
+
+    return success(null, 201, "تم حذف المنتج بنجاح");
+  } catch (error) {
+    console.error("❌ Error deleting category:", error);
+    return fail(500, "حدث خطأ أثناء حذف المنتج");
+  }
 };
 
 export const productServices = {

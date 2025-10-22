@@ -50,7 +50,7 @@ export default function ProductTable() {
     {
       key: "category",
       header: "الفئة",
-      render: (product) => <CategoryBadge name={product.category.name} />,
+      render: (product) => <CategoryBadge name={product?.category?.name} />,
     },
     {
       key: "price",
