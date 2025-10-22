@@ -38,7 +38,6 @@ export function AdminChart() {
       try {
         const res = await fetch(`${mainUrl}/api/dashboard/chart`);
         const json = await res.json();
-        console.log(json.data);
         if (json.success) setChartData(json.data);
       } catch (err) {
         console.error("Error fetching chart data:", err);

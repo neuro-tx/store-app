@@ -1,4 +1,5 @@
 import dbConnect from "@/lib/db";
+import { success } from "@/lib/states";
 import { Category } from "@/model/category.model";
 import { Product } from "@/model/product.model";
 
@@ -86,4 +87,57 @@ export const getChartData = async () => {
   }
 
   return chartData;
+};
+
+export const getProductTable = async (req: Request) => {
+  const { searchParams } = new URL(req.url);
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+  const limit = Math.max(1, parseInt(searchParams.get("limit") || "10"));
+  const search = searchParams.get("search")?.trim() || "";
+
+  const filter: any = {};
+
+  if (search) {
+    filter.$text = { $search: search };
+  }
+
+  const skip = (page - 1) * limit;
+
+  const projection = {
+    name: 1,
+    price: 1,
+    images: { $slice: 1 },
+    isAvailable: 1,
+    isFeatured: 1,
+    discount: 1,
+    hasDiscount: 1,
+    category: 1,
+    createdAt: 1,
+  };
+  const sortOptions: any = search
+    ? { score: { $meta: "textScore" } }
+    : { createdAt: -1 };
+
+  const [totalItems, items] = await Promise.all([
+    Product.countDocuments(filter),
+    Product.find(filter, projection)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(limit)
+      .populate("category", "name")
+      .lean()
+      .exec(),
+  ]);
+
+  const totalPages = Math.ceil(totalItems / limit);
+
+  const data = {
+    items,
+    totalPages,
+    totalItems,
+    pageSize: items.length,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+  };
+  return success(data, 200);
 };

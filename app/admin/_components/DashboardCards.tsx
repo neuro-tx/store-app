@@ -2,6 +2,7 @@ import { List, Package, Percent, Star } from "lucide-react";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { getDashboardCards } from "@/features/dashborad";
 
 interface DataCardProps {
   title: string;
@@ -12,14 +13,19 @@ interface DataCardProps {
 }
 
 const DashboardCards = async () => {
-  const getCardsData = async () => {
-    const mainUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const res = await fetch(`${mainUrl}/api/dashboard/cards`);
-    return await res.json();
-  };
+  let data;
+  try {
+    data = await getDashboardCards();
+  } catch (error) {
+    console.error("Failed to fetch dashboard cards data:", error);
 
-  const data = await getCardsData();
-
+    data = {
+      categoryCount: 0,
+      productCount: 0,
+      featuredProducts: 0,
+      discountedProducts: 0,
+    };
+  }
   const catCount = data.categoryCount;
   const prodCount = data.productCount;
   const featCount = data.featuredProducts;

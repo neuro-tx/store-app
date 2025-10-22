@@ -1,6 +1,7 @@
 import React from "react";
 import DashboardCards from "./_components/DashboardCards";
 import { AdminChart } from "@/components/AdminChart";
+import ProductsPage from "./_components/ProductTable";
 
 const page = async () => {
   return (
@@ -10,6 +11,7 @@ const page = async () => {
           <div className="w-full space-y-6">
             <DashboardCards />
             <AdminChart />
+            <ProductsPage />
           </div>
         </div>
       </div>
