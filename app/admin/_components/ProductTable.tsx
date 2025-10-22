@@ -25,7 +25,7 @@ interface Product {
   createdAt: string;
 }
 
-export default function ProductsPage() {
+export default function ProductTable() {
   const BAIS_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const mainUrl = `${BAIS_URL}/api/product`;
   const productUrl = `${BAIS_URL}/api/dashboard/product-table`;
@@ -93,8 +93,8 @@ export default function ProductsPage() {
   ];
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="mb-6">
+    <div className="space-y-5 py-3">
+      <div>
         <h3 className="text-2xl font-bold">المنتجات</h3>
         <p className="text-muted-foreground">إدارة مخزون المنتجات الخاص بك</p>
       </div>
@@ -102,11 +102,12 @@ export default function ProductsPage() {
       <TableData<Product>
         fetchUrl={productUrl}
         columns={columns}
+        pageSize={7}
         searchPlaceholder="ابحث عن المنتجات بالاسم ..."
         emptyMessage="لا توجد منتجات حاليا!"
         actions={{
           deleteUrl: mainUrl,
-          editUrl: "/dashboard/product",
+          editUrl: "/admin/product",
         }}
       />
     </div>

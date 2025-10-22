@@ -141,3 +141,74 @@ export const getProductTable = async (req: Request) => {
   };
   return success(data, 200);
 };
+
+export const getCategoryTable = async (req: Request) => {
+  const { searchParams } = new URL(req.url);
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+  const limit = Math.max(1, parseInt(searchParams.get("limit") || "10"));
+  const search = searchParams.get("search")?.trim() || "";
+
+  const matchFilter: any = {};
+  if (search) {
+    matchFilter.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { slug: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  const skip = (page - 1) * limit;
+  const pipeline: any[] = [
+    ...(search ? [{ $match: matchFilter }] : []),
+
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "category",
+        as: "products",
+      },
+    },
+    {
+      $addFields: {
+        productCount: { $size: "$products" },
+      },
+    },
+    {
+      $sort: { createdAt: -1 },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        slug: 1,
+        image: 1,
+        productCount: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    },
+  ];
+
+  const [totalItems, categories] = await Promise.all([
+    Category.aggregate([
+      ...(search ? [{ $match: matchFilter }] : []),
+      { $count: "total" },
+    ]).then((result) => result[0]?.total || 0),
+
+    Category.aggregate([...pipeline, { $skip: skip }, { $limit: limit }]),
+  ]);
+
+  const totalPages = Math.ceil(totalItems / limit);
+
+  const data = {
+    items: categories,
+    totalItems,
+    currentPage: page,
+    totalPages,
+    pageSize: categories.length,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+  };
+
+  return success(data, 200);
+};
