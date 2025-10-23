@@ -8,12 +8,12 @@ export const ADMIN_LINKS = [
   },
   {
     title: "إضافة منتج",
-    path: "/admin/add-products",
+    path: "/admin/product/add-product",
     icon: Package,
   },
   {
     title: "إضافة فئة",
-    path: "/admin/add-categories",
+    path: "/admin/category/add-cat",
     icon: List,
   },
   {

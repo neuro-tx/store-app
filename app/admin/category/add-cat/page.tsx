@@ -1,5 +1,5 @@
 import React from "react";
-import CategoryForm from "../_components/CategoryForm";
+import CategoryForm from "../../_components/CategoryForm";
 import { CategoryType } from "@/lib/category-schema";
 
 const CategoriesAdmin = () => {
