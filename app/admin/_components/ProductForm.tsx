@@ -11,37 +11,32 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import BasicInfo from "./BasicInfo";
 import PricingInfo from "./PricingInfo";
 import DescriptionInfo from "./DescriptionInfo";
-import { toast } from "sonner";
+import { productFormCreate } from "@/lib/formSubmition";
 
-const ProductForm = ({ defaultValues }: { defaultValues: ProductType }) => {
+const ProductForm = () => {
   const [submiting, startSubmit] = useTransition();
   const [clearUploader, setclearUploader] = useState<boolean>(false);
+  const defaultVal: ProductType = {
+    name: "",
+    category: "",
+    description: "",
+    images: [],
+    capacity: "",
+    discount: 0,
+    price: 0,
+    brand: "",
+    isAvailable: true,
+    isFeatured: false,
+    endDate: null,
+  };
 
   const onSubmit = (data: any) => {
-    startSubmit(async () => {
-      try {
-        const res = await fetch("/api/product", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-        const result = await res.json();
-
-        if (!res.ok) {
-          toast.error(result.message || "حدث خطأ أثناء إنشاء المنتج");
-          return;
-        }
-        toast.success(result.message || "تم إنشاء المنتج بنجاح");
-      } catch (error) {
-        toast.error("حدث خطأ غير متوقع أثناء إنشاء المنتج");
-      }
-    });
+    startSubmit(async () => await productFormCreate(data));
   };
 
   const handleReset = () => {
     setclearUploader(true);
-    form.reset(defaultValues);
+    form.reset(defaultVal);
   };
 
   useEffect(() => {
@@ -57,7 +52,7 @@ const ProductForm = ({ defaultValues }: { defaultValues: ProductType }) => {
   const methods = useForm();
   const form = useForm<ProductType>({
     resolver: zodResolver(productSchema),
-    defaultValues: defaultValues,
+    defaultValues: defaultVal,
   });
 
   return (

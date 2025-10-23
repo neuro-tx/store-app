@@ -1,12 +1,13 @@
 import { toast } from "sonner";
 
 interface FileProps {
-  file: File;
+  file?: File;
   key: string;
   objectUrl: string;
   isUploading?: boolean;
   isError?: boolean;
   isDeleting?: boolean;
+  isExisting?: boolean;
 }
 
 export interface DeleteFromS3Result {

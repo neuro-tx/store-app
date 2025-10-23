@@ -1,21 +1,7 @@
 import React from "react";
 import ProductForm from "../../_components/ProductForm";
-import { ProductType } from "@/lib/product-schema";
 
 const ProductPAdmin = () => {
-  const defaultVal : ProductType = {
-    name: "",
-    category: "",
-    description: "",
-    images: [],
-    capacity: "",
-    discount: 0,
-    price: 0,
-    brand: "",
-    isAvailable: true,
-    isFeatured: false,
-    endDate: null
-  };
   return (
     <div className="w-full min-h-svh overflow-x-hidden">
       <div className="container mx-auto">
@@ -27,7 +13,7 @@ const ProductPAdmin = () => {
               </h2>
             </div>
 
-            <ProductForm defaultValues={defaultVal}/>
+            <ProductForm />
           </div>
         </div>
       </div>

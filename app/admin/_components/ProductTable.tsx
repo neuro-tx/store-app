@@ -42,8 +42,11 @@ export default function ProductTable() {
       key: "name",
       header: "اسم المنتج",
       render: (product) => (
-        <div className="max-w-40 truncate line-clamp-1">
+        <div className="max-w-40 truncate line-clamp-1 flex flex-col">
           <span className="font-medium">{product.name}</span>
+          <span className="text-xs text-muted-foreground">
+            {product._id}
+          </span>
         </div>
       ),
     },

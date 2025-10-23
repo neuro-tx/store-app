@@ -24,29 +24,46 @@ import { useForm } from "react-hook-form";
 import Uploader from "./Uploader";
 import { categorySchema, CategoryType } from "@/lib/category-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { categoryFormCreate, categoryFormUpdate } from "@/lib/formSubmition";
+import { useRouter } from "next/navigation";
 
-const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
+type Mood = "create" | "update";
+
+const CategoryForm = ({
+  defaultValues,
+  mood = "create",
+  editId,
+}: {
+  defaultValues: CategoryType;
+  mood?: Mood;
+  editId?: string;
+}) => {
   const [submiting, startSubmit] = useTransition();
   const [clearUploader, setclearUploader] = useState<boolean>(false);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const router = useRouter();
+
+  const form = useForm<CategoryType>({
+    resolver: zodResolver(categorySchema),
+    defaultValues: defaultValues,
+  });
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const hasChanges =
+        JSON.stringify(values) !== JSON.stringify(defaultValues);
+      setIsDirty(hasChanges);
+    });
+    return () => subscription.unsubscribe();
+  }, [form, defaultValues]);
 
   const onSubmit = (data: any) => {
     startSubmit(async () => {
-      try {
-        const res = await fetch("/api/category", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-        const result = await res.json();
-        if (!res.ok) {
-          toast.error(result.message || "حدث خطأ أثناء إنشاء التصنيف");
-          return;
-        }
-
-        toast.success(result.message || "تم إنشاء التصنيف بنجاح");
-      } catch (error) {
-        toast.error("حدث خطأ أثناء إنشاء التصنيف");
+      if (mood === "create") {
+        await categoryFormCreate(data);
+      } else {
+        await categoryFormUpdate(data, editId as string);
+        setTimeout(() => router.push("/admin"), 1000);
       }
     });
   };
@@ -66,10 +83,6 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
     }
   }, [clearUploader]);
 
-  const form = useForm<CategoryType>({
-    resolver: zodResolver(categorySchema),
-    defaultValues: defaultValues,
-  });
   return (
     <div>
       <Form {...form}>
@@ -80,7 +93,9 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
                 صورة الفئة
               </CardTitle>
               <CardDescription className="text-sm text-muted-foreground">
-                قم برفع صورة تعبّر عن الفئة لعرضها في واجهة المتجر.
+                {mood === "create"
+                  ? " قم برفع صورة تعبّر عن الفئة لعرضها في واجهة المتجر."
+                  : "قم بتحديث صورة الفئة الحالية أو رفع صورة جديدة لعرضها في واجهة المتجر."}
               </CardDescription>
             </CardHeader>
 
@@ -96,6 +111,9 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
                         dir="categories"
                         maxFiles={1}
                         clear={clearUploader}
+                        defaultValue={
+                          mood === "update" ? defaultValues.image : undefined
+                        }
                         onChange={(value) => field.onChange(value)}
                       />
                     </FormControl>
@@ -112,7 +130,9 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
                 المعلومات الأساسية
               </CardTitle>
               <CardDescription className="text-sm text-muted-foreground">
-                أدخل التفاصيل الأساسية الخاصة بالفئة، مثل الاسم والوصف
+                {mood === "create"
+                  ? "أدخل التفاصيل الأساسية الخاصة بالفئة، الاسم والوصف"
+                  : "قم بتعديل التفاصيل الأساسية الخاصة بالفئة، الاسم والوصف."}
               </CardDescription>
             </CardHeader>
 
@@ -160,21 +180,30 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
             </CardContent>
           </Card>
 
-          <div className="grid gap-3 md:grid-cols-2 items-baseline">
+          <div className="flex flex-col md:flex-row gap-3">
             <Button
               type="submit"
-              disabled={submiting}
-              className="w-full bg-primary text-white hover:bg-primary/90 cursor-pointer"
+              disabled={submiting || (mood === "update" && !isDirty)}
+              variant="outline"
+              className="w-full md:w-fit lg:w-xs cursor-pointer"
             >
               {submiting ? (
                 <div className="flex items-center gap-2 text-base">
                   <Loader className="animate-spin" />
-                  <span>جارٍ الإنشاء...</span>
+                  {mood === "create" ? (
+                    <span>جارٍ الإنشاء...</span>
+                  ) : (
+                    <span>جارٍ التحديث...</span>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
                   <Plus />
-                  <span>إنشاء فئة</span>
+                  {mood === "create" ? (
+                    <span>إنشاء فئة</span>
+                  ) : (
+                    <span>تحديث الفئة</span>
+                  )}
                 </div>
               )}
             </Button>
@@ -183,7 +212,7 @@ const CategoryForm = ({ defaultValues }: { defaultValues: CategoryType }) => {
               type="button"
               disabled={submiting}
               variant="destructive"
-              className="w-full flex items-center justify-center gap-2 cursor-pointer hover:opacity-90"
+              className="w-full md:w-fit lg:w-xs flex items-center justify-center gap-2 cursor-pointer hover:opacity-90"
               onClick={() => handleReset()}
             >
               <RefreshCcw />

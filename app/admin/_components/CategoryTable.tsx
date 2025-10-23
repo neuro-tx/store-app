@@ -50,7 +50,7 @@ export default function CategoryTable() {
         <div className="flex flex-col">
           <span className="font-medium text-base">{category.name}</span>
           <span className="text-xs text-muted-foreground">
-            /{category.slug}
+            {category._id}
           </span>
         </div>
       ),

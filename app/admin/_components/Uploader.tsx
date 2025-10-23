@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { deleteFile, uploadFile } from "@/lib/fileOperations";
-import { cn } from "@/lib/utils";
+import { cn, extractKey } from "@/lib/utils";
 import { ImageUp, Loader2, TriangleAlert, X } from "lucide-react";
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
@@ -11,15 +11,17 @@ import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
 interface FileProps {
-  file: File;
+  file?: File;
   key: string;
   objectUrl: string;
   isUploading?: boolean;
   isError?: boolean;
   isDeleting?: boolean;
+  isExisting?: boolean;
 }
 
 type Dir = "products" | "categories";
+type Mood = "create" | "update";
 
 interface UploaderProps {
   multiple?: boolean;
@@ -27,6 +29,8 @@ interface UploaderProps {
   maxFiles: number;
   onChange?: (value: string | string[]) => void;
   clear?: boolean;
+  mood?: Mood;
+  defaultValue?: string | string[];
 }
 
 const Uploader = ({
@@ -35,19 +39,37 @@ const Uploader = ({
   onChange,
   dir,
   clear = false,
+  mood = "create",
+  defaultValue,
 }: UploaderProps) => {
   const [files, setFiles] = useState<Array<FileProps>>([]);
   const { getValues } = useFormContext();
 
   useEffect(() => {
+    if (defaultValue) {
+      const urls = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
+      const existingFiles = urls
+        .filter((url) => url)
+        .map((url) => ({
+          key: extractKey(url),
+          objectUrl: url,
+          isExisting: true,
+        }));
+      setFiles(existingFiles);
+    }
+  }, [defaultValue]);
+
+  useEffect(() => {
     if (clear && files.length > 0) {
       files.forEach((f) => {
-        if (f.objectUrl) URL.revokeObjectURL(f.objectUrl);
+        if (f.objectUrl && !f.isExisting) {
+          URL.revokeObjectURL(f.objectUrl);
+        }
       });
       setFiles([]);
-      onChange?.([]);
+      onChange?.(multiple ? [] : "");
     }
-  }, [clear]);
+  }, [clear, multiple, onChange]);
 
   const handleRejection = (rejections: FileRejection[]) => {
     const error = rejections[0]?.errors[0];
@@ -94,6 +116,7 @@ const Uploader = ({
         file: f,
         objectUrl: URL.createObjectURL(f),
         key: "",
+        isExisting: false,
       }));
 
       setFiles((prev) => [...prev, ...newFiles]);
@@ -156,6 +179,10 @@ const Uploader = ({
       } else {
         await deleteFile(file, setFiles);
         onChange?.("");
+      }
+
+      if (file.objectUrl && !file.isExisting) {
+        URL.revokeObjectURL(file.objectUrl);
       }
     } catch (error) {
       console.error("Delete failed:", error);
