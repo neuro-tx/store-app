@@ -59,3 +59,23 @@ export const productFormCreate = async (data: any) => {
     toast.error("حدث خطأ غير متوقع أثناء إنشاء المنتج");
   }
 };
+
+export const productFormUpdate = async (data: any ,id:string) => {
+  try {
+    const res = await fetch(`${BAIS_URL}/api/product/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      toast.error(result.message || "حدث خطأ أثناء تحديث المنتج");
+      return;
+    }
+    toast.success(result.message || "تم تحديث المنتج بنجاح");
+  } catch (error) {
+    toast.error("حدث خطأ غير متوقع أثناء تحديث المنتج");
+  }
+}

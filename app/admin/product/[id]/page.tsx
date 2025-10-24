@@ -1,3 +1,6 @@
+import { ProductType } from "@/lib/product-schema";
+import ProductEditForm from "../../_components/ProductEditForm";
+
 interface ProductParam {
   params: {
     id: string;
@@ -14,18 +17,18 @@ export default async function EditProduct({ params }: ProductParam) {
   });
   const { data } = await res.json();
 
-  const defValues = {
-    name: data.name,
-    category: data.category,
-    description: data.description,
-    images: data.images,
-    capacity: data.capacity,
-    discount: data.discount,
-    price: data.price,
-    brand: data.brand,
-    isAvailable: data.isAvailable,
-    isFeatured: data.isFeatures,
-    endDate: data.endDate,
+  const defValues: ProductType = {
+    name: data.name || "",
+    category: data.category._id || "",
+    description: data.description || "",
+    images: data.images || [],
+    brand: data.brand || "",
+    discount: data.discount || 0,
+    endDate: data.endDate || null,
+    isAvailable: data.isAvailable || true,
+    isFeatured: data.isFeatured || false,
+    price: data.price || 0,
+    capacity: data.capacity || "",
   };
 
   return (
@@ -40,7 +43,7 @@ export default async function EditProduct({ params }: ProductParam) {
               </p>
             </div>
 
-            {/* ProductEditForm */}
+            <ProductEditForm initialValue={defValues} prodId={id} />
           </div>
         </div>
       </div>
