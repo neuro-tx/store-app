@@ -131,24 +131,27 @@ export function TableData<T extends Record<string, any>>({
 
   const handleDelete = async () => {
     if (!selectedItem || !actions?.deleteUrl) return;
-
     setIsDeleting(true);
+
+    const deletePromise = fetch(`${actions.deleteUrl}/${selectedItem._id}`, {
+      method: "DELETE",
+    }).then(async (response) => {
+      if (!response.ok) throw new Error("فشل الحذف");
+      return response.json();
+    });
+
+    await toast.promise(deletePromise, {
+      loading: "جارٍ حذف العنصر...",
+      success: "تم الحذف بنجاح",
+      error: "حدث خطأ أثناء الحذف",
+    });
+
     try {
-      console.log(`${actions.deleteUrl}/${selectedItem._id}`);
-      const response = await fetch(`${actions.deleteUrl}/${selectedItem._id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("فشل الحذف");
-      }
-
-      toast.success("تم الحذف بنجاح");
+      await deletePromise;
       setSelectedItem(null);
       refetch();
     } catch (err) {
-      console.error(err)
-      toast.error("حدث خطأ أثناء الحذف");
+      console.error(err);
     } finally {
       setShowDeleteDialog(false);
       setIsDeleting(false);
