@@ -13,19 +13,10 @@ interface DataCardProps {
 }
 
 const DashboardCards = async () => {
-  let data;
-  try {
-    data = await getDashboardCards();
-  } catch (error) {
-    console.error("Failed to fetch dashboard cards data:", error);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const res = await fetch(`${BASE_URL}/api/dashboard/cards`);
+  const { data } = await res.json();
 
-    data = {
-      categoryCount: 0,
-      productCount: 0,
-      featuredProducts: 0,
-      discountedProducts: 0,
-    };
-  }
   const catCount = data.categoryCount;
   const prodCount = data.productCount;
   const featCount = data.featuredProducts;

@@ -1,7 +1,10 @@
+"use server";
+
 import dbConnect from "@/lib/db";
 import { success } from "@/lib/states";
 import { Category } from "@/model/category.model";
 import { Product } from "@/model/product.model";
+import { NextResponse } from "next/server";
 
 interface DayData {
   date: string;
@@ -12,20 +15,38 @@ interface DayData {
 await dbConnect();
 
 export const getDashboardCards = async () => {
-  const categoryCount = await Category.countDocuments();
-  const productCount = await Product.countDocuments();
+  try {
+    const categoryCount = await Category.countDocuments();
+    const productCount = await Product.countDocuments();
 
-  const featuredProducts = await Product.countDocuments({ isFeatured: true });
-  const discountedProducts = await Product.countDocuments({
-    discount: { $gt: 0 },
-  });
+    const featuredProducts = await Product.countDocuments({ isFeatured: true });
+    const discountedProducts = await Product.countDocuments({
+      discount: { $gt: 0 },
+    });
 
-  return {
-    categoryCount,
-    productCount,
-    featuredProducts,
-    discountedProducts,
-  };
+    const data = {
+      categoryCount,
+      productCount,
+      featuredProducts,
+      discountedProducts,
+    };
+    return success(data, 200);
+  } catch (error) {
+    console.error(error);
+    const res = {
+      categoryCount: 0,
+      productCount: 0,
+      featuredProducts: 0,
+      discountedProducts: 0,
+    };
+    return NextResponse.json(
+      {
+        success: false,
+        data: res,
+      },
+      { status: 400 }
+    );
+  }
 };
 
 export const getChartData = async () => {
