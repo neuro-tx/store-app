@@ -1,6 +1,7 @@
+import { adminCheck } from "@/lib/auth";
 import { errorHandler } from "@/lib/errorHandler";
 import { fail, success } from "@/lib/states";
-import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 export const POST = errorHandler(async (req: Request) => {
   const { userKey, password } = await req.json();
@@ -13,7 +14,11 @@ export const POST = errorHandler(async (req: Request) => {
     return fail(400, "غير مصرح بالوصول.");
   }
 
-  const response = success(null, 200, "تم تسجيل الدخول بنجاح، سيتم تحويلك إلى لوحة التحكم...");
+  const response = success(
+    null,
+    200,
+    "تم تسجيل الدخول بنجاح، سيتم تحويلك إلى لوحة التحكم..."
+  );
 
   response.cookies.set("auth-role", "admin", {
     httpOnly: true,
@@ -23,4 +28,13 @@ export const POST = errorHandler(async (req: Request) => {
   });
 
   return response;
+});
+
+export const GET = errorHandler(async (req: Request) => {
+  const admin = await adminCheck();
+
+  if (admin) {
+    return NextResponse.json({ auth: true }, { status: 200 });
+  }
+  return NextResponse.json({ auth: false }, { status: 403 });
 });

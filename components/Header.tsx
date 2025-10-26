@@ -17,6 +17,8 @@ const Header = () => {
   const path = usePathname();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const isMoblie = useIsMobile();
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const mainUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   useEffect(() => {
     setIsOpen(false);
@@ -27,6 +29,22 @@ const Header = () => {
       setIsOpen(false);
     },
   });
+
+  useEffect(() => {
+    const checker = async () => {
+      try {
+        const res = await fetch(`${mainUrl}/api/auth`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setIsAdmin(!!data?.auth);
+      } catch (error) {
+        setIsOpen(false);
+      }
+    };
+
+    checker();
+  }, []);
 
   return (
     <header className="min-h-10 w-full bg-transparent backdrop-blur-xs fixed top-0 left-0 z-50">
@@ -76,12 +94,14 @@ const Header = () => {
 
             <ModeToggle />
 
-            <Link
-              href="/admin"
-              className="text-white bg-primary font-medium rounded-lg text-sm px-4 lg:px-5 py-1.5 lg:py-2 transition-all duration-200 border border-transparent hover:border-primary hover:bg-transparent hover:text-primary"
-            >
-              لوحة الادارة
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="text-white bg-primary font-medium rounded-lg text-sm px-4 lg:px-5 py-1.5 lg:py-2 transition-all duration-200 border border-transparent hover:border-primary hover:bg-transparent hover:text-primary"
+              >
+                لوحة الادارة
+              </Link>
+            )}
           </div>
         </div>
 
