@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import { toast } from "sonner";
 import z from "zod";
@@ -31,6 +32,9 @@ const AuthPage = () => {
   const [userKey, setUserKey] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isPending, transition] = useTransition();
+  const router = useRouter();
+
+  const authUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   const submit = () => {
     transition(async () => {
@@ -42,11 +46,22 @@ const AuthPage = () => {
       }
 
       try {
-        const { password: pwd, userKey: usKey } = validate.data;
-        console.log(usKey, pwd);
+        const res = await fetch(`${authUrl}/api/auth`, {
+          method: "POST",
+          body: JSON.stringify(validate.data),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        setTimeout(() => router.push("/admin"), 500);
+        toast.success(data.message);
       } catch (error) {
         console.error("Login error:", error);
-        toast.error("حدث خطأ غير متوقع أثناء تسجيل الدخول.");
+        toast.error("حدث خطأ أثناء الاتصال بالخادم.");
       }
     });
   };
