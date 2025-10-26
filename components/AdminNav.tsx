@@ -7,7 +7,7 @@ import { TextAlignJustify, X } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 
 const Navbar = () => {
-  const { isOpen, toggleSidebar } = useSidebar();
+  const { isOpen, openSidebar } = useSidebar();
   return (
     <div className="container mx-auto border-b  flex items-center">
       <div className="p-4 lg:px-6 py-2 w-full">
@@ -29,14 +29,13 @@ const Navbar = () => {
                     variant="outline"
                     size="icon"
                     className="border"
-                    onClick={toggleSidebar}
+                    onClick={openSidebar}
+                    disabled={isOpen}
                   >
-                    {isOpen ? <X /> : <TextAlignJustify />}
+                    <TextAlignJustify />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  {isOpen ? <p>إغلاق القائمة</p> : <p>فتح القائمة</p>}
-                </TooltipContent>
+                <TooltipContent side="bottom">فتح القائمة</TooltipContent>
               </Tooltip>
             </div>
           </div>

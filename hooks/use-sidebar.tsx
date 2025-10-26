@@ -5,7 +5,6 @@ import React, {
   createContext,
   useState,
   useMemo,
-  useEffect,
 } from "react";
 
 interface SidebarContextProps {

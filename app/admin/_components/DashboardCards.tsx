@@ -85,7 +85,7 @@ const DataCard = ({
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <div
-          className={cn("size-8 grid place-items-center rounded-full", style)}
+          className={cn("size-8 aspect-square grid place-items-center rounded-full", style)}
         >
           <Icon className="w-5 h-5" />{" "}
         </div>

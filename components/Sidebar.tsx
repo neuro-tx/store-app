@@ -6,23 +6,29 @@ import { cn } from "@/lib/utils";
 import { TreePalm } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useTheme } from "next-themes";
+import { useClickout } from "@/hooks/use-clickout";
 
 const Sidebar = () => {
   const path = usePathname();
-  const { isOpen } = useSidebar();
+  const { isOpen, closeSidebar } = useSidebar();
   const { setTheme, theme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  const sidebarRef = useClickout<HTMLDivElement>({
+    onClickout: () => closeSidebar(),
+  });
+
   return (
     <div
+      ref={sidebarRef}
       className={cn(
-        "w-64 min-h-svh h-full border-l z-30 fixed top-0 right-0 transition-transform duration-300 overflow-x-hidden translate-x-full md:translate-x-0 bg-background",
+        "w-64 aspect-square md:w-48 lg:w-56 min-h-svh h-full border-l z-30 fixed top-0 right-0 transition-transform duration-300 overflow-x-hidden translate-x-full md:translate-x-0 bg-background",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
@@ -49,6 +55,7 @@ const Sidebar = () => {
                       path == link.path &&
                         "bg-primary text-white hover:bg-primary/90"
                     )}
+                    onClick={closeSidebar}
                   >
                     <link.icon size={20} />
                     <span className="">{link.title}</span>

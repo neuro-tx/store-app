@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 import { TextAlignJustify, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useClickout } from "@/hooks/use-clickout";
 
 const Header = () => {
   const path = usePathname();
@@ -20,6 +21,12 @@ const Header = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [isMoblie]);
+
+  const dropMenuRef = useClickout<HTMLDivElement>({
+    onClickout: () => {
+      setIsOpen(false);
+    },
+  });
 
   return (
     <header className="min-h-10 w-full bg-transparent backdrop-blur-xs fixed top-0 left-0 z-50">
@@ -58,14 +65,13 @@ const Header = () => {
                   variant="ghost"
                   size="icon"
                   className="border md:hidden"
-                  onClick={() => setIsOpen((prev) => !prev)}
+                  onClick={() => setIsOpen(true)}
+                  disabled={isOpen}
                 >
-                  {isOpen ? <X /> : <TextAlignJustify />}
+                  <TextAlignJustify />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="bottom">
-                {isOpen ? <p>إغلاق القائمة</p> : <p>فتح القائمة</p>}
-              </TooltipContent>
+              <TooltipContent side="bottom">فتح القائمة</TooltipContent>
             </Tooltip>
 
             <ModeToggle />
@@ -80,6 +86,7 @@ const Header = () => {
         </div>
 
         <div
+          ref={dropMenuRef}
           className={cn(
             "absolute w-full bg-primary/10 backdrop-blur-sm z-10 left-0 top-18 transition-all duration-500 md:hidden",
             isOpen

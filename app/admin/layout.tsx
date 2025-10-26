@@ -26,7 +26,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <div className="w-full min-h-svh overflow-x-hidden relative">
               <Sidebar />
               
-              <main className="mr-0 md:mr-64 transition duration-300">
+              <main className="mr-0 md:mr-48 lg:mr-56 transition duration-300">
                 <Navbar />
                 {children}
               </main>
