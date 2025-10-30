@@ -7,15 +7,24 @@ export async function middleware(req: NextRequest) {
 
   const isAdminRoute = url.startsWith("/admin");
 
+  const res = NextResponse.next();
   if (isAdminRoute) {
     const admin = await adminCheck();
 
     if (!admin) {
       return NextResponse.redirect(new URL("/not-found", req.url));
     }
+
+    res.cookies.set("auth-role", "admin", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 7 * 60 * 60 * 24,
+    });
+    return res;
   }
 
-  return NextResponse.next();
+  return res;
 }
 
 export const config = {
