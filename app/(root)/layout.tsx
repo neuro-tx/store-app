@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemedToaster } from "@/components/ThemedToaster ";
-import Header from "@/components/Header";
+import { Header } from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "دار الواحة | منتجات غذائية طبيعية من واحة سيوة",
