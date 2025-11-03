@@ -10,7 +10,6 @@ import { links } from "@/data/home";
 import Image from "next/image";
 import { useClickout } from "@/hooks/use-clickout";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { ModeToggle } from "./ModeToggle";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -73,7 +72,7 @@ export const Header = () => {
         >
           <div className="relative flex flex-wrap items-center justify-between flex-row-reverse gap-6 py-3 md:gap-0 md:py-4">
             <div className="flex w-full md:w-auto justify-between items-center">
-              <div className="flex items-center gap-3 md:hidden">
+              <div className="inline-flex md:hidden">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -89,8 +88,6 @@ export const Header = () => {
                   </TooltipTrigger>
                   <TooltipContent side="bottom">فتح القائمة</TooltipContent>
                 </Tooltip>
-
-                <ModeToggle />
               </div>
 
               <div>
@@ -106,7 +103,15 @@ export const Header = () => {
               </div>
             </div>
 
-            <div className="absolute inset-0 m-auto hidden size-fit md:block">
+            <div className="hidden md:flex md:space-x-7">
+              {isAdmin && (
+                <motion.div whileHover={{ scale: 1.02 }}>
+                  <Button asChild variant="default" className="text-foreground">
+                    <Link href="/admin">لوحة الإدارة</Link>
+                  </Button>
+                </motion.div>
+              )}
+
               <motion.ul
                 initial="hidden"
                 animate="visible"
@@ -142,17 +147,6 @@ export const Header = () => {
                   </motion.li>
                 ))}
               </motion.ul>
-            </div>
-
-            <div className="md:flex hidden items-center gap-3">
-              <ModeToggle />
-              {isAdmin && (
-                <motion.div whileHover={{ scale: 1.05 }}>
-                  <Button asChild variant="default" className="text-foreground">
-                    <Link href="/admin">لوحة الإدارة</Link>
-                  </Button>
-                </motion.div>
-              )}
             </div>
           </div>
         </div>
