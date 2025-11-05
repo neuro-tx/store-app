@@ -67,7 +67,7 @@ export const Header = () => {
           className={cn(
             "mx-auto container px-4 transition-all duration-300 md:px-6",
             isScrolled &&
-              "rounded-2xl border max-w-6xl md:px-4 backdrop-blur-sm bg-background/50"
+              "rounded-2xl border max-w-5xl md:px-4 backdrop-blur-sm bg-background/50"
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between flex-row-reverse gap-6 py-3 md:gap-0 md:py-4">
@@ -136,10 +136,10 @@ export const Header = () => {
                     <Link
                       href={item.path}
                       className={cn(
-                        "block duration-150 font-medium py-1 px-2",
+                        "relative px-2 py-1 text-base after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom-left",
                         item.path == path
-                          ? "text-primary dark:text-accent-foreground border-b border-primary"
-                          : "text-muted-foreground hover:text-foreground"
+                          ? "text-primary dark:text-accent-foreground after:scale-x-100 after:bg-primary"
+                          : "text-muted-foreground hover:text-foreground hover:after:scale-x-100 after:bg-muted-foreground hover:after:bg-foreground"
                       )}
                     >
                       {item.label}
