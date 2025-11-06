@@ -10,7 +10,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const Hero = () => {
   const isMobile = useIsMobile();
   return (
-    <section className="relative overflow-hidden bg-black py-6">
+    <section className="relative overflow-hidden bg-black py-6 pb-52">
       <div className="relative min-h-screen flex items-center justify-center">
         <div className="absolute inset-0 select-none pointer-events-none">
           <motion.div
