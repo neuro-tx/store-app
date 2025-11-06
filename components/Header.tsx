@@ -65,9 +65,9 @@ export const Header = () => {
       >
         <div
           className={cn(
-            "mx-auto container px-4 transition-all duration-300 md:px-6",
+            "mx-auto container px-4 rounded-md transition-all duration-300 md:px-6",
             isScrolled &&
-              "rounded-2xl border max-w-5xl md:px-4 backdrop-blur-sm bg-background/50"
+              "rounded-2xl border border-neutral-600 dark:border-neutral-600 max-w-5xl md:px-4 backdrop-blur-sm bg-back/50"
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between flex-row-reverse gap-6 py-3 md:gap-0 md:py-4">
@@ -80,7 +80,7 @@ export const Header = () => {
                       disabled={menuState}
                       aria-label={menuState ? "Close Menu" : "Open Menu"}
                       variant="ghost"
-                      className="border"
+                      className="border border-neutral-600 text-neutral-400 cursor-pointer transition duration-300 bg-neutral-950 hover:bg-neutral-900 dark:hover:bg-neutral-900 dark:text-neutral-400 hover:text-neutral-300 dark:hover:text-neutral-300"
                       size="icon"
                     >
                       <Menu className="size-6 duration-200" />
@@ -106,7 +106,7 @@ export const Header = () => {
             <div className="hidden md:flex md:space-x-7">
               {isAdmin && (
                 <motion.div whileHover={{ scale: 1.02 }}>
-                  <Button asChild variant="default" className="text-foreground">
+                  <Button asChild variant="default" className="text-white">
                     <Link href="/admin">لوحة الإدارة</Link>
                   </Button>
                 </motion.div>
@@ -138,8 +138,8 @@ export const Header = () => {
                       className={cn(
                         "relative px-2 py-1 text-base after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom-left",
                         item.path == path
-                          ? "text-primary dark:text-accent-foreground after:scale-x-100 after:bg-primary"
-                          : "text-muted-foreground hover:text-foreground hover:after:scale-x-100 after:bg-muted-foreground hover:after:bg-foreground"
+                          ? "text-amber-400 after:scale-x-100 after:bg-amber-400"
+                          : "text-neutral-400 hover:text-neutral-200 after:bg-neutral-200 hover:after:scale-x-100"
                       )}
                     >
                       {item.label}
@@ -159,7 +159,7 @@ export const Header = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
-              className="absolute left-0 right-0 top-0 mt-20 mx-2 z-40 rounded-xl border bg-background p-4 shadow-lg md:hidden"
+              className="absolute left-0 right-0 top-0 mt-20 mx-2 z-40 rounded-xl border border-neutral-600 bg-neutral-950 p-4 shadow-lg md:hidden"
             >
               <ul className="text-base flex flex-col-reverse gap-1">
                 {links.map((item, index) => (
@@ -172,7 +172,7 @@ export const Header = () => {
                     className={cn(
                       "relative before:absolute before:w-2.5 before:top-0 before:-right-1.5 before:h-full before:rounded-r-md",
                       item.path === path
-                        ? "before:bg-accent-foreground"
+                        ? "before:bg-primary"
                         : "bg-transparent"
                     )}
                   >
@@ -180,10 +180,10 @@ export const Header = () => {
                       href={item.path}
                       onClick={() => setMenuState(false)}
                       className={cn(
-                        "block duration-150 p-3 rounded-lg font-medium",
+                        "block duration-200 p-3 rounded-lg font-medium",
                         item.path === path
-                          ? "bg-gradient-to-l from-primary/50 text-accent-foreground"
-                          : "text-muted-foreground hover:bg-primary/5 hover:text-foreground"
+                          ? "bg-gradient-to-l from-primary/50 text-amber-100"
+                          : "text-neutral-400 hover:bg-primary/20 hover:text-neutral-100"
                       )}
                     >
                       {item.label}
@@ -194,7 +194,11 @@ export const Header = () => {
 
               <div className="mt-4">
                 {isAdmin && (
-                  <Button asChild variant="default" className="w-full">
+                  <Button
+                    asChild
+                    variant="default"
+                    className="w-full text-white"
+                  >
                     <Link href="/admin">لوحة الإدارة</Link>
                   </Button>
                 )}

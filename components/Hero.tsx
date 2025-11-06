@@ -107,7 +107,7 @@ const Hero = () => {
                   delay: 0.2,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="text-balance font-cooper hidden md:block font-thin"
+                className="text-balance font-cooper hidden md:block font-thin text-neutral-200"
                 style={{
                   fontSize: "clamp(2rem, 4vw , 3rem)",
                 }}
@@ -127,7 +127,7 @@ const Hero = () => {
               فاخر.
             </motion.p>
 
-            <div className="mask-b-from-55% relative -mr-52 mt-10 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20">
+            <div className="mask-b-from-55% relative -mr-50 mt-10 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 40 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -136,10 +136,10 @@ const Hero = () => {
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 viewport={{ once: true }}
-                className="inset-shadow-2xs ring-ring/60 inset-shadow-white/20 bg-background/30 backdrop-blur-xs relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1"
+                className="inset-shadow-2xs ring-ring/60 inset-shadow-white/20 bg-black/30 backdrop-blur-xs relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-neutral-700 p-4 shadow-lg shadow-zinc-950/15 ring-1"
               >
                 <Image
-                  className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block object-cover object-center brightness-90"
+                  className="bg-black aspect-15/8 relative rounded-2xl block object-cover object-center brightness-90"
                   src="/images/hero/main.jpg"
                   alt="app screen"
                   width="2700"
