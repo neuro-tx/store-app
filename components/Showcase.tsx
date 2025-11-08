@@ -13,7 +13,6 @@ const Showcase = () => {
 
   return (
     <section
-      id="features"
       className="relative z-10 w-full py-20 px-5 md:px-6 lg:px-8 text-center bg-gradient-to-b from-black dark:from-black/50 via-neutral-100 to-neutral-100"
       aria-labelledby="what-we-produce-title"
     >
