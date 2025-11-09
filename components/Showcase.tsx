@@ -6,6 +6,7 @@ import CategoryCard from "./CategoryCard";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
+import AnimatedText from "./AnimatedText";
 
 const Showcase = () => {
   const isMobile = useIsMobile();
@@ -28,11 +29,18 @@ const Showcase = () => {
             ما نُقدّمه لك
           </h3>
 
-          <p className="mt-4 text-muted-foreground leading-relaxed text-base mx-auto max-w-xl">
-            في دار الواحة نُقدّم لك خلاصة الطبيعة من التمور الفاخرة، العسل
-            النقي، والزيوت الطبيعية المستخلصة بعناية. نؤمن أن الجودة تبدأ من
-            الأصل وتنتهي بتجربةٍ تليقُ بك.
-          </p>
+          <AnimatedText
+            custom={{
+              from: { x: -35, opacity: 0 },
+              to: { x: 0, opacity: 1 },
+            }}
+          >
+            <p className="mt-4 text-muted-foreground leading-relaxed text-base mx-auto max-w-xl">
+              في دار الواحة نُقدّم لك خلاصة الطبيعة من التمور الفاخرة، العسل
+              النقي، والزيوت الطبيعية المستخلصة بعناية. نؤمن أن الجودة تبدأ من
+              الأصل وتنتهي بتجربةٍ تليقُ بك.
+            </p>
+          </AnimatedText>
         </motion.div>
 
         <div className="my-15">

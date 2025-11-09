@@ -2,7 +2,6 @@ import { List, Package, Percent, Star } from "lucide-react";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { getDashboardCards } from "@/features/dashborad";
 
 interface DataCardProps {
   title: string;
