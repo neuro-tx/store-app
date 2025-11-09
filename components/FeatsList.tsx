@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ImageReval from "./ImageReval";
 
 interface FeatListProps {
   title: string;
@@ -7,13 +7,8 @@ interface FeatListProps {
   images: string[];
 }
 
-const FeatsList = ({
-  title,
-  description,
-  index,
-  images,
-}: FeatListProps) => {
-  const formattedIndex = index < 10 ? `0${index +1}` : `${index}`;
+const FeatsList = ({ title, description, index, images }: FeatListProps) => {
+  const formattedIndex = index < 10 ? `0${index + 1}` : `${index}`;
 
   return (
     <div className="p-4 pt-6 border-t border-white/10">
@@ -50,32 +45,24 @@ const FeatItem = ({ images = [] }: { images?: string[] }) => {
     <div className="md:col-span-10 md:col-start-3">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:grid-rows-2">
         {/* Main large image */}
-        <div className="col-span-2 md:row-span-2 h-60 md:h-[546px]">
-          <Image
-            src={main}
-            alt="Main showcase image"
-            width={560}
-            height={500}
-            className="w-full h-full object-cover rounded-xl"
-          />
-        </div>
+        <ImageReval
+          source={main}
+          classVals="col-span-2 md:row-span-2 h-60 md:h-[546px]"
+          imgAlt="Main showcase image"
+        />
 
         {/* Secondary images */}
         {rest.slice(0, 2).map((src, i) => (
-          <div key={i} className="h-48 w-full md:h-[265px]">
-            <Image
-              src={src}
-              alt={`Showcase image ${i + 2}`}
-              width={560}
-              height={500}
-              className="w-full h-full object-cover rounded-xl"
-            />
-          </div>
+          <ImageReval
+            key={i}
+            classVals="h-48 w-full md:h-[265px]"
+            source={src}
+            imgAlt={`Showcase image ${i + 2}`}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-
-export default FeatsList
+export default FeatsList;

@@ -9,8 +9,8 @@ const FeaturesShow = () => {
       description:
         "منتجات تجمع بين النكهة الأصيلة والجودة الرفيعة — من زيت الزيتون والتمور إلى التوابل والحلويات — نقدمها لك بتصميم حديث يعبّر عن أصالة دار الواحة وروح سيوة العريقة.",
       images: [
-        "/images/category/varient-1.jpg",
-        "/images/category/olives-1.jpg",
+        "/images/reval/reval-1.jpg",
+        "/images/reval/reval-2.jpg",
         "/images/category/olives-2.jpg",
       ],
     },
@@ -19,16 +19,16 @@ const FeaturesShow = () => {
       description:
         "تمور فاخرة وتوابل أصيلة تنقلك إلى عمق الواحة — حيث الطعم يعكس تاريخ المكان وروحه.",
       images: [
-        "/images/category/date-1.jpg",
-        "/images/category/olives-1.jpg",
-        "/images/category/honey-2.jpg",
+        "/images/reval/reval-3.jpg" ,
+        "/images/reval/reval-4.jpg" ,
+        "/images/reval/reval-5.jpg" ,
       ],
     },
   ];
 
   return (
     <section
-      className="relative z-10 w-full bg-neutral-100 py-16 px-5 md:px-6 lg:px-8 overflow-x-hidden"
+      className="relative z-10 w-full bg-neutral-100 py-20 px-5 md:px-6 lg:px-8 overflow-x-hidden"
       aria-labelledby="features-products-title"
     >
       <div className="min-h-dvh text-right bg-neutral-900 rounded-2xl lg:rounded-3xl">
