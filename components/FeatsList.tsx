@@ -47,7 +47,7 @@ const FeatItem = ({ images = [] }: { images?: string[] }) => {
         {/* Main large image */}
         <ImageReval
           source={main}
-          classVals="col-span-2 md:row-span-2 h-60 md:h-[546px]"
+          classVals="col-span-2 md:row-span-2 h-60 md:h-[520px]"
           imgAlt="Main showcase image"
         />
 
@@ -55,7 +55,7 @@ const FeatItem = ({ images = [] }: { images?: string[] }) => {
         {rest.slice(0, 2).map((src, i) => (
           <ImageReval
             key={i}
-            classVals="h-48 w-full md:h-[265px]"
+            classVals="h-48 w-full md:h-[252px]"
             source={src}
             imgAlt={`Showcase image ${i + 2}`}
           />

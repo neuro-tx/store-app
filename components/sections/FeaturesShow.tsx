@@ -1,6 +1,6 @@
 import React from "react";
-import FeatsList from "./FeatsList";
-import AnimatedText from "./AnimatedText";
+import FeatsList from "../FeatsList";
+import AnimatedText from "../AnimatedText";
 
 const FeaturesShow = () => {
   const list = [

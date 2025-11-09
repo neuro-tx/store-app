@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import React from "react";
 import "../globals.css";
 import Sidebar from "@/components/Sidebar";
-import SiderbarProvider from "../providers/SiderbarProvider";
+import SiderbarProvider from "../../components/providers/SiderbarProvider";
 import Navbar from "@/components/AdminNav";
 
 export const metadata: Metadata = {

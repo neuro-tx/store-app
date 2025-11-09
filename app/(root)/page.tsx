@@ -1,6 +1,6 @@
-import Showcase from "@/components/Showcase";
-import Hero from "@/components/Hero";
-import FeaturesShow from "@/components/FeaturesShow";
+import Showcase from "@/components/sections/Showcase";
+import Hero from "@/components/sections/Hero";
+import FeaturesShow from "@/components/sections/FeaturesShow";
 
 export default function Home() {
   return (

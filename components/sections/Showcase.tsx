@@ -2,11 +2,11 @@
 
 import { categories } from "@/data/show-data";
 import React from "react";
-import CategoryCard from "./CategoryCard";
+import CategoryCard from "../CategoryCard";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
-import AnimatedText from "./AnimatedText";
+import AnimatedText from "../AnimatedText";
 
 const Showcase = () => {
   const isMobile = useIsMobile();

@@ -21,6 +21,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
   const [textParts, setTextParts] = useState<string[]>([]);
+  const [textContent, setTextContent] = useState<string>("");
 
   useEffect(() => {
     if (
@@ -30,6 +31,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
       const text = children.props.children.trim();
       const parts = text.split(/(\s+)/);
       setTextParts(parts);
+      setTextContent(text);
     } else {
       console.warn("AnimatedText: child element must contain plain text only.");
     }
@@ -48,6 +50,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
             delay: i * stagger,
             ease: [0.25, 0.1, 0.25, 1],
           }}
+          aria-hidden="true"
           {...motionProps}
         >
           {part}
@@ -58,7 +61,14 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
 
   const clonedElement = React.cloneElement(children, {
     ref: containerRef,
-    children: animatedChildren,
+    "aria-label": textContent,
+    role: "text",
+    children: (
+      <>
+        {animatedChildren}
+        <span className="sr-only">{textContent}</span>
+      </>
+    ),
   });
 
   return clonedElement;

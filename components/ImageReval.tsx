@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ImageRevealProps {
   source: string;
@@ -18,10 +19,11 @@ const ImageReveal: React.FC<ImageRevealProps> = ({
   spring = true,
 }) => {
   const elementRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: elementRef,
-    offset: ["start 87%", "end 70%"],
+    offset: isMobile ? ["start end", "end 70%"] : ["start 87%", "end 75%"],
   });
 
   const smoothProgress = spring
