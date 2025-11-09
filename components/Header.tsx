@@ -12,6 +12,7 @@ import { useClickout } from "@/hooks/use-clickout";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useWindowScroll } from "@/hooks/use-scroll";
 
 export const Header = () => {
   const path = usePathname();
@@ -21,6 +22,24 @@ export const Header = () => {
   const mainUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const isMobile = useIsMobile();
 
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [lastScrollY, setLastScrollY] = useState<number>(0);
+  const { scrollY: currentScrollY } = useWindowScroll();
+
+  useEffect(() => {
+    setIsScrolled(currentScrollY > 50);
+
+    if (currentScrollY === 0) {
+      setIsVisible(true);
+    } else if (currentScrollY > lastScrollY) {
+      setIsVisible(true);
+    } else if (currentScrollY < lastScrollY) {
+      setIsVisible(false);
+    }
+
+    setLastScrollY(currentScrollY);
+  }, [currentScrollY, scrollY]);
+
   const menuRef = useClickout<HTMLDivElement>({
     onClickout: () => setMenuState(false),
   });
@@ -28,12 +47,6 @@ export const Header = () => {
   useEffect(() => {
     setMenuState(false);
   }, [isMobile]);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     const checker = async () => {
@@ -60,7 +73,11 @@ export const Header = () => {
         data-state={menuState && "active"}
         className="fixed z-20 w-full px-2"
         initial={{ top: 0 }}
-        animate={{ top: isScrolled ? 15 : 5 }}
+        animate={{
+          y: isVisible ? 0 : -120,
+          top: isScrolled ? 15 : 5,
+          opacity: isVisible ? 1 : 0,
+        }}
         transition={{ duration: 0.4 }}
       >
         <div
