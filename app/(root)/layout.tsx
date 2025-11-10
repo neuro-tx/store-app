@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ThemedToaster } from "@/components/ThemedToaster ";
 import { Header } from "@/components/Header";
 import LenisProvider from "@/components/providers/LenisProvider";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "دار الواحة | منتجات غذائية طبيعية من واحة سيوة",
@@ -38,6 +39,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
           <LenisProvider>{children}</LenisProvider>
+          <Footer />
           <ThemedToaster />
         </ThemeProvider>
       </body>

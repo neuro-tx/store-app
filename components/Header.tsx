@@ -38,7 +38,7 @@ export const Header = () => {
     }
 
     setLastScrollY(currentScrollY);
-  }, [currentScrollY, scrollY]);
+  }, [currentScrollY, lastScrollY]);
 
   const menuRef = useClickout<HTMLDivElement>({
     onClickout: () => setMenuState(false),

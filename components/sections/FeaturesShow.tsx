@@ -7,11 +7,11 @@ const FeaturesShow = () => {
     {
       title: "تجربة فاخرة",
       description:
-        "منتجات تجمع بين النكهة الأصيلة والجودة الرفيعة — من زيت الزيتون والتمور إلى التوابل والحلويات — نقدمها لك بتصميم حديث يعبّر عن أصالة دار الواحة وروح سيوة العريقة.",
+        "منتجات تجمع بين النكهة الأصيلة والجودة الرفيعة — من زيت الزيتون والتمور إلى التوابل ومستحضرات التجميل — نقدمها لك بتصميم حديث يعبّر عن أصالة دار الواحة وروح سيوة العريقة.",
       images: [
         "/images/reval/reval-1.jpg",
         "/images/reval/reval-2.jpg",
-        "/images/category/olives-2.jpg",
+        "/images/reval/reval-6.jpg",
       ],
     },
     {
@@ -19,9 +19,9 @@ const FeaturesShow = () => {
       description:
         "تمور فاخرة وتوابل أصيلة تنقلك إلى عمق الواحة — حيث الطعم يعكس تاريخ المكان وروحه.",
       images: [
-        "/images/reval/reval-3.jpg" ,
-        "/images/reval/reval-4.jpg" ,
-        "/images/reval/reval-5.jpg" ,
+        "/images/reval/reval-3.jpg",
+        "/images/reval/reval-4.jpg",
+        "/images/reval/reval-5.jpg",
       ],
     },
   ];
