@@ -2,7 +2,7 @@ import React from "react";
 import FeatsList from "../FeatsList";
 import AnimatedText from "../AnimatedText";
 
-const FeaturesShow = () => {
+const CollectionView = () => {
   const list = [
     {
       title: "تجربة فاخرة",
@@ -65,4 +65,4 @@ const FeaturesShow = () => {
   );
 };
 
-export default FeaturesShow;
+export default CollectionView;

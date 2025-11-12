@@ -1,6 +1,6 @@
 import Showcase from "@/components/sections/Showcase";
 import Hero from "@/components/sections/Hero";
-import FeaturesShow from "@/components/sections/FeaturesShow";
+import CollectionView from "@/components/sections/CollectionView";
 import Features from "@/components/sections/Features";
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
     <div className="min-h-screen w-full overflow-x-hidden">
       <Hero />
       <Showcase />
-      <FeaturesShow />
+      <CollectionView />
       <Features />
     </div>
   );

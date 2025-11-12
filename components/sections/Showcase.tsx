@@ -1,12 +1,12 @@
 "use client";
 
-import { categories } from "@/data/show-data";
+import { collectiones } from "@/data/show-data";
 import React from "react";
-import CategoryCard from "../CategoryCard";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedText from "../AnimatedText";
+import CollectionCard from "../CollectionCard";
 
 const Showcase = () => {
   const isMobile = useIsMobile();
@@ -57,9 +57,9 @@ const Showcase = () => {
               },
             }}
           >
-            {categories.slice(0, count).map((cat, i) => (
+            {collectiones.slice(0, count).map((coll, i) => (
               <li key={i}>
-                <CategoryCard category={cat} index={i} />
+                <CollectionCard category={coll} index={i} />
               </li>
             ))}
           </motion.ul>

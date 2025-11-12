@@ -1,4 +1,4 @@
-export const categories = [
+export const collectiones = [
   {
     name: "التمور الفاخرة",
     description:

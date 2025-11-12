@@ -112,9 +112,10 @@ export const Header = () => {
                   <Image
                     src="/images/logo.svg"
                     alt="Dar El Waha"
-                    width={135}
-                    height={40}
+                    width={190}
+                    height={50}
                     priority
+                    className="select-none"
                   />
                 </Link>
               </div>

@@ -18,8 +18,8 @@ const Footer = () => {
           <Image
             src="/images/logo.svg"
             alt="Dar El Waha"
-            width={135}
-            height={40}
+            width={200}
+            height={50}
             priority
           />
         </div>

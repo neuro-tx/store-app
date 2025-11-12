@@ -4,19 +4,17 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-interface CategoryProp {
+interface CollectionProp {
   name: string;
   description: string;
   image: string | string[];
-  slug?: string;
-  _id?: string;
 }
 
-const CategoryCard = ({
+const CollectionCard = ({
   category,
   index,
 }: {
-  category: CategoryProp;
+  category: CollectionProp;
   index: number;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,9 +43,9 @@ const CategoryCard = ({
         delay: index * 0.15,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group cursor-pointer"
+      className="group"
     >
-      <div className="flex flex-col gap-4 lg:gap-5 px-3 lg:px-4 pt-3 lg:pt-4 pb-5 lg:pb-6 rounded-xl lg:rounded-2xl bg-neutral-900 cursor-pointer group relative overflow-hidden">
+      <div className="flex flex-col gap-4 lg:gap-5 px-3 lg:px-4 pt-3 lg:pt-4 pb-5 lg:pb-6 rounded-xl lg:rounded-2xl bg-neutral-900 group relative overflow-hidden">
         <div className="relative rounded-lg lg:rounded-xl overflow-hidden w-full h-[260px] md:h-[350px] lg:h-[clamp(470px,32vw,580px)]">
           <div className="absolute inset-0 bg-neutral-900/30 backdrop-blur-md z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out" />
 
@@ -115,4 +113,4 @@ const CategoryCard = ({
   );
 };
 
-export default CategoryCard;
+export default CollectionCard;
