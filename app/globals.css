@@ -202,6 +202,16 @@ body {
   }
 }
 
+@layer utilities {
+  .section {
+    @apply relative w-full bg-neutral-100 py-10 px-2 md:px-6 lg:px-8 overflow-x-hidden
+  }
+
+  .section-container {
+    @apply bg-neutral-900 rounded-2xl lg:rounded-3xl
+  }
+}
+
 *::selection {
   background-color: var(--color-primary);
   color: var(--color-foreground);

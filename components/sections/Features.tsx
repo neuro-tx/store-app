@@ -35,14 +35,14 @@ const Features = () => {
   ];
 
   return (
-    <section className="relative w-full bg-neutral-100 py-20 px-5 md:px-6 lg:px-8 overflow-x-hidden">
+    <section className="section">
       <div className="text-right bg-neutral-900 rounded-2xl lg:rounded-3xl">
         <div className="py-20 space-y-10">
           <div className="text-center mb-12 max-w-3xl mx-auto px-5 md:px-8">
             <AnimatedText>
-              <h2 className="text-3xl md:text-4xl font-cairo font-semibold text-neutral-100 mb-3">
+              <h3 className="text-3xl md:text-4xl font-cairo font-semibold text-neutral-100 mb-3">
                 لماذا نحن؟
-              </h2>
+              </h3>
             </AnimatedText>
             <AnimatedText>
               <p className="text-muted-foreground text-base leading-relaxed">

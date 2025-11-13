@@ -3,8 +3,8 @@ import { fail } from "@/lib/states";
 import { productServices } from "@/services/product.service";
 import { isValidObjectId } from "mongoose";
 
-const getProducts = async () => {
-  return await productServices.getAllProducts();
+const getProducts = async (request: Request) => {
+  return await productServices.getAllProducts(request);
 };
 
 const getProductById = async (id: string) => {

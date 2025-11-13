@@ -8,14 +8,27 @@ import { deleteFromS3 } from "@/lib/fileOperations";
 
 await dbConnect();
 
-const getAllProducts = async (limit: number = 10, page: number = 1) => {
-  if (page < 1) {
-    return fail(400, "يجب أن تكون الصفحة أكبر من 0");
-  }
+const getAllProducts = async (req: Request) => {
+  const { searchParams } = new URL(req.url);
+  const discount = searchParams.get("discount") || "fasle";
+  const features = searchParams.get("features")?.trim() || "false";
+
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+  const limit = Math.max(1, parseInt(searchParams.get("limit") || "10"));
 
   const skip = (page - 1) * limit;
 
-  const products = await Product.find()
+  const matcher = {} as any;
+
+  if (discount === "true" && features === "true") {
+    matcher.$or = [{ hasDiscount: true }, { isFeatured: true }];
+  } else if (discount === "true") {
+    matcher.hasDiscount = true;
+  } else if (features === "true") {
+    matcher.isFeatured = true;
+  }
+
+  const products = await Product.find(matcher)
     .populate("category", "name slug _id")
     .sort({ createdAt: -1 })
     .limit(limit)

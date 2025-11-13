@@ -28,10 +28,10 @@ const CollectionView = () => {
 
   return (
     <section
-      className="relative z-10 w-full bg-neutral-100 py-20 px-5 md:px-6 lg:px-8 overflow-x-hidden"
+      className="section"
       aria-labelledby="features-products-title"
     >
-      <div className="min-h-dvh text-right bg-neutral-900 rounded-2xl lg:rounded-3xl">
+      <div className="min-h-dvh text-right section-container">
         <div className="w-full h-full flex flex-col gap-16 lg:gap-24 px-4 pt-16 lg:pt-24 pb-4">
           <div className="lg:grid lg:grid-cols-12 gap-24">
             <div className="flex flex-col col-span-12 lg:col-span-10 lg:col-start-3 text-right">

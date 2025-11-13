@@ -1,6 +1,5 @@
 "use client";
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "../ui/button";
 import AnimatedText from "../AnimatedText";
 import { useRouter } from "next/navigation";
@@ -35,8 +34,6 @@ const cardVariants = {
 
 const CategoriesSection = () => {
   const router = useRouter();
-  const isMobile = useIsMobile();
-  const count = useMemo(() => (isMobile ? 3 : 6), [isMobile]);
 
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [isError, setIsError] = useState(false);
@@ -68,7 +65,7 @@ const CategoriesSection = () => {
   }, [apiUrl]);
 
   return (
-    <section className="relative w-full bg-neutral-900 py-20 px-5 md:px-6 lg:px-8 overflow-x-hidden">
+    <section className="relative w-full bg-neutral-900 py-20 px-3 md:px-6 lg:px-8 overflow-x-hidden">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 p-1">
         <div>
           <AnimatedText>
@@ -97,8 +94,8 @@ const CategoriesSection = () => {
           لم نتمكن من تحميل الفئات حالياً. حاول مرة أخرى لاحقاً.
         </p>
       ) : isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {Array.from({ length: count }).map((_, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
               className="rounded-3xl overflow-hidden shadow-lg relative h-52 md:h-64"
@@ -113,16 +110,16 @@ const CategoriesSection = () => {
         </div>
       ) : categories.length > 0 ? (
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {categories.slice(0, count).map((cat) => (
+          {categories.slice(0 ,6).map((cat) => (
             <Link key={cat._id} href={`/categories/${cat._id}`} passHref>
               <motion.div
                 variants={cardVariants}
-                className="group relative overflow-hidden rounded-xl border-white shadow-lg cursor-pointer"
+                className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer"
               >
                 <div className="absolute inset-0">
                   <Image
@@ -138,7 +135,7 @@ const CategoriesSection = () => {
                   <h3 className="text-white text-2xl font-semibold font-cairo mb-2">
                     {cat.name}
                   </h3>
-                  <p className="text-neutral-200 text-sm leading-relaxed line-clamp-2">
+                  <p className="text-neutral-200 text-sm line-clamp-2">
                     {cat.description}
                   </p>
                 </div>
