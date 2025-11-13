@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Scheherazade+New:wght@400;500;600;700&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Scheherazade+New:wght@400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
@@ -9,6 +9,7 @@
 @font-face {
   font-family: "cooper";
   src: url("/fonts/CooperArabic.ttf") format("truetype");
+  font-display: swap;
 }
 
 html {
@@ -50,7 +51,6 @@ html {
   --sidebar-border: oklch(0.9276 0.0058 264.5313);
   --sidebar-ring: oklch(0.7686 0.1647 70.0804);
   --cairo: "Tajawal", sans-serif;
-  --tajawal: "Tajawal", sans-serif;
   --scheherazade: "Scheherazade New", serif;
   --cooper: "cooper", serif;
   --radius: 0.375rem;
@@ -171,7 +171,6 @@ html {
   --color-sidebar-ring: var(--sidebar-ring);
 
   --font-cairo: var(--cairo);
-  --font-tajawal: var(--tajawal);
   --font-scheherazade: var(--scheherazade);
   --font-cooper: var(--cooper);
 
@@ -191,7 +190,7 @@ html {
 }
 
 body {
-  font-family: var(--tajawal);
+  font-family: var(--cairo);
 }
 
 @layer base {
