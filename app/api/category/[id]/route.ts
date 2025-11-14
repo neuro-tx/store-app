@@ -1,5 +1,6 @@
 import { categoryController } from "@/controller/category.controller";
 import { errorHandler } from "@/lib/errorHandler";
+import { revalidateTag } from "next/cache";
 
 interface ReqProps {
   params: {
@@ -14,12 +15,19 @@ export const GET = errorHandler(async (_req: Request, { params }: ReqProps) => {
 
 export const PUT = errorHandler(async (req: Request, { params }: ReqProps) => {
   const { id } = await params;
-  return categoryController.updateCat(id, req);
+  const res = await categoryController.updateCat(id, req);
+  revalidateTag("category");
+  revalidateTag("categories");
+  return res;
 });
 
 export const DELETE = errorHandler(
   async (_req: Request, { params }: ReqProps) => {
     const { id } = await params;
-    return categoryController.deleteCat(id);
+    const data = categoryController.deleteCat(id);
+    revalidateTag("category");
+    revalidateTag("categories");
+    revalidateTag("products");
+    return data;
   }
 );

@@ -6,6 +6,7 @@ import { fail, success } from "@/lib/states";
 import { Category } from "@/model/category.model";
 import { extractKey } from "@/lib/utils";
 import { deleteFromS3 } from "@/lib/fileOperations";
+import { Product } from "@/model/product.model";
 
 await dbConnect();
 
@@ -49,12 +50,16 @@ const deleteCategory = async (id: string) => {
       return fail(404, "الفئة غير موجودة");
     }
 
+    const delProducts = await deleteProductsByCatId(id);
+
+    if (!delProducts) {
+      return fail(500, "فشل حذف منتجات الفئة");
+    }
+
     const key = extractKey(res.data.image);
     if (!key) {
       return fail(400, "لم يتم العثور على مفتاح الصورة");
     }
-    console.log("the img url: ", res.data.image);
-    console.log("the key: ", key);
 
     const delRes = await deleteFromS3(key);
     if (!delRes?.success) {
@@ -70,6 +75,27 @@ const deleteCategory = async (id: string) => {
   } catch (error) {
     console.error("❌ Error deleting category:", error);
     return fail(500, "حدث خطأ أثناء حذف الفئة");
+  }
+};
+
+const deleteProductsByCatId = async (catId: string): Promise<boolean> => {
+  try {
+    const products = await Product.find({ category: catId });
+    for (const prod of products) {
+      for (const img of prod.images) {
+        try {
+          await deleteFromS3(extractKey(img));
+        } catch (err) {
+          console.error("❌ Error deleting image from S3:", img, err);
+        }
+      }
+    }
+
+    await Product.deleteMany({ category: catId });
+    return true
+  } catch (error) {
+    console.error("❌ Error deleting products:", error);
+    return false
   }
 };
 

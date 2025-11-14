@@ -13,7 +13,7 @@ interface DataCardProps {
 
 const DashboardCards = async () => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const res = await fetch(`${BASE_URL}/api/dashboard/cards`);
+  const res = await fetch(`${BASE_URL}/api/dashboard/cards` ,{next: {tags: ["products", "categories"]}});
   const { data } = await res.json();
 
   const catCount = data.categoryCount;
