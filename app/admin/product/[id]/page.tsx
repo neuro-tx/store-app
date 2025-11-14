@@ -15,7 +15,28 @@ export default async function EditProduct({ params }: ProductParam) {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
+
+  if (!res.ok) {
+    return (
+      <div className="w-full h-[75dvh] flex items-center justify-center">
+        <p className="text-yellow-600 text-lg md:text-xl font-medium">
+          لم يتم العثور على المنتج — تحقق من الرابط أو المورد
+        </p>
+      </div>
+    );
+  }
+
   const { data } = await res.json();
+
+  if (!data) {
+    return (
+      <div className="w-full h-[75dvh] flex items-center justify-center">
+        <p className="text-red-600 text-lg md:text-xl font-medium">
+          لم يتم العثور على المنتج في قاعدة البيانات
+        </p>
+      </div>
+    );
+  }
 
   const defValues: ProductType = {
     name: data.name || "",

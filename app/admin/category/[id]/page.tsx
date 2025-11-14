@@ -14,7 +14,28 @@ export default async function EditCategory({ params }: CategoryParam) {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
+
+  if (!res.ok) {
+    return (
+      <div className="w-full h-[75dvh] flex items-center justify-center">
+        <p className="text-yellow-600 text-lg md:text-xl font-medium">
+          لم يتم العثور على الفئة — تحقق من الرابط أو الموارد
+        </p>
+      </div>
+    );
+  }
+
   const { data } = await res.json();
+
+  if (!data) {
+    return (
+      <div className="w-full h-[75dvh] flex items-center justify-center">
+        <p className="text-red-600 text-lg md:text-xl font-medium">
+          لم يتم العثور على الفئة في قاعدة البيانات
+        </p>
+      </div>
+    );
+  }
 
   const defValues = {
     name: data.name,
@@ -34,7 +55,7 @@ export default async function EditCategory({ params }: CategoryParam) {
               </p>
             </div>
 
-            <CategoryForm mood="update" editId={id} defaultValues={defValues}/>
+            <CategoryForm mood="update" editId={id} defaultValues={defValues} />
           </div>
         </div>
       </div>
