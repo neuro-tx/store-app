@@ -2,14 +2,13 @@
 
 import {
   TableData,
-  BooleanBadge,
   DateCell,
   type TableColumn,
   ImageCell,
 } from "@/components/TableData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Check, Copy, Package, Plus } from "lucide-react";
+import { Check, Copy, Package } from "lucide-react";
 import { useState } from "react";
 
 interface Category {
