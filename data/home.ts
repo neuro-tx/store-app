@@ -1,7 +1,7 @@
 export const links = [
   {
-    path: "/about",
-    label: "عن المتجر",
+    path: "/features",
+    label: "المميزة",
   },
   {
     path: "/products",

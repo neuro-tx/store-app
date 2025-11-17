@@ -1,7 +1,7 @@
 import React from "react";
 import AnimatedText from "../AnimatedText";
 import ProductsGrid from "../ProductsGrid";
-import Link from "next/link";
+import RouterBtn from "../RouterBtn";
 
 const Offer = async () => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
@@ -89,12 +89,12 @@ const Offer = async () => {
           )}
 
           <div className="w-fit mx-auto text-center">
-            <Link
-              href="/products"
-              className="px-5 py-1.5 bg-primary text-white rounded-md font-cairo transition duration-200 hover:opacity-90 cursor-pointer hover:underline text-base font-medium"
+            <RouterBtn
+              cls="px-5 py-1.5 bg-primary text-white rounded-md font-cairo transition duration-200 hover:opacity-90 cursor-pointer hover:underline text-base font-medium"
+              path="/products"
             >
               عرض المزيد من المنتجات
-            </Link>
+            </RouterBtn>
           </div>
         </div>
       </div>

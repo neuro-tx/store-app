@@ -1,16 +1,14 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useRouter } from "next/navigation";
+import RouterBtn from "../RouterBtn";
 
 const Hero = () => {
   const isMobile = useIsMobile();
-  const router = useRouter();
   return (
     <section className="relative overflow-hidden bg-black py-6 pb-52">
       <div className="relative min-h-screen flex items-center justify-center">
@@ -57,9 +55,9 @@ const Hero = () => {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="flex justify-center"
             >
-              <div
-                className="hover:border-t-border bg-muted group flex w-fit items-center gap-4 rounded-full border py-1 px-4 shadow-md transition-colors duration-300 border-t-white/5 shadow-zinc-950 cursor-pointer"
-                onClick={()=> router.push("/products/features")}
+              <RouterBtn
+                cls="hover:border-t-border bg-muted group flex w-fit items-center gap-4 rounded-full border py-1 px-4 shadow-md transition-colors duration-300 border-t-white/5 shadow-zinc-950 cursor-pointer"
+                path="/features"
               >
                 <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500">
                   <div className="flex w-12 translate-x-0 duration-500 ease-in-out group-hover:translate-x-1/2">
@@ -75,7 +73,7 @@ const Hero = () => {
                 <span className="text-foreground text-sm">
                   اكتشف منتجاتنا المميزة
                 </span>
-              </div>
+              </RouterBtn>
             </motion.div>
 
             <div className="space-y-4 w-full">

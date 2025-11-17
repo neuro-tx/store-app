@@ -4,6 +4,7 @@ import CollectionView from "@/components/sections/CollectionView";
 import Features from "@/components/sections/Features";
 import CategoriesSection from "@/components/sections/CategoriesSection";
 import Offer from "@/components/sections/Offer";
+import AboutPreview from "@/components/AboutPreview";
 
 export default async function Home() {
   return (
@@ -14,6 +15,7 @@ export default async function Home() {
       <CollectionView />
       <Offer />
       <Features />
+      <AboutPreview />
     </div>
   );
 }

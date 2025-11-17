@@ -2,11 +2,11 @@
 
 import { collectiones } from "@/data/show-data";
 import React from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedText from "../AnimatedText";
 import CollectionCard from "../CollectionCard";
+import RouterBtn from "../RouterBtn";
 
 const Showcase = () => {
   const isMobile = useIsMobile();
@@ -89,12 +89,12 @@ const Showcase = () => {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
           >
-            <Link
-              href="/products"
-              className="inline-block bg-primary text-white px-6 py-2.5 rounded-full w-xs text-sm font-medium hover:bg-primary/90 transition-all duration-300"
+            <RouterBtn
+              cls="inline-block bg-primary text-white px-6 py-2.5 rounded-full w-xs text-sm font-medium hover:bg-primary/90 transition-all duration-300 cursor-pointer"
+              path="/products"
             >
               اكتشف منتجاتنا
-            </Link>
+            </RouterBtn>
           </motion.div>
         </motion.div>
       </div>
