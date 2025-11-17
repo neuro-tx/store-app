@@ -9,8 +9,8 @@ import { useSidebar } from "@/hooks/use-sidebar";
 const Navbar = () => {
   const { isOpen, openSidebar } = useSidebar();
   return (
-    <div className="container mx-auto border-b  flex items-center">
-      <div className="p-4 lg:px-6 py-2 w-full">
+    <div className="container mx-auto border-b flex items-center h-20">
+      <div className="px-4 lg:px-6 py-2 w-full">
         <div className="w-full flex items-center justify-between gap-5">
           <div>
             <h1 className="text-2xl font-bold font-cairo text-primary">

@@ -274,8 +274,9 @@ const ProductEditForm = ({
                         <FormControl>
                           <Input
                             className="text-sm"
-                            type="number"
-                            min={0}
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             {...field}
                           />
                         </FormControl>
@@ -295,8 +296,9 @@ const ProductEditForm = ({
                         <FormControl>
                           <Input
                             className="text-sm"
-                            type="number"
-                            min={0}
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             {...field}
                           />
                         </FormControl>

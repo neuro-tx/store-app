@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 interface ProductCardProps {
   _id: string;
@@ -34,14 +35,30 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const router = useRouter();
 
+  function formatEndDate(endDate?: string | Date): string | null {
+    if (!endDate) return null;
+
+    const date = new Date(endDate);
+    if (isNaN(date.getTime())) return null;
+
+    return date.toLocaleDateString("ar-EG", {
+      day: "2-digit",
+      month: "long",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+
+  const formatted = formatEndDate(endDate);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.6 }}
-      className="group relative cursor-pointer overflow-hidden rounded-2xl shadow-lg bg-neutral-900 border"
-      onClick={() => router.push(`/products/${_id}`)}
+      className="group relative overflow-hidden rounded-2xl shadow-lg bg-neutral-900 border border-neutral-700"
     >
       <div className="relative w-full h-64 overflow-hidden rounded-t-xl">
         <Image
@@ -72,14 +89,16 @@ const ProductCard = ({
         </div>
       </div>
 
-      <div className="p-4 text-right relative">
-        <p className="text-lg font-semibold font-cairo text-neutral-100 mb-1">
+      <div className="p-4 text-right relative space-y-2">
+        <p className="text-lg font-semibold font-cairo text-neutral-100">
           {name}
         </p>
-        <p className="text-sm text-neutral-500 mb-2 text-ellipsis line-clamp-2">{description}</p>
+        <p className="text-sm text-neutral-500 mb-2 text-ellipsis line-clamp-2">
+          {description}
+        </p>
 
         {capacity && (
-          <p className="text-sm text-neutral-400 mb-1">السعة: {capacity}</p>
+          <p className="text-sm text-neutral-400">السعة: {capacity}</p>
         )}
 
         <p className="text-base font-semibold text-neutral-300 flex items-center gap-3">
@@ -96,10 +115,14 @@ const ProductCard = ({
         </p>
 
         {hasDiscount && endDate && (
-          <p className="text-xs text-red-500 mt-1">
-            ينتهي الخصم في: {new Date(endDate).toLocaleDateString("ar-EG")}
-          </p>
+          <p className="text-xs text-red-500">ينتهي الخصم في: {formatted}</p>
         )}
+        <Button
+          className="mt-3 w-full text-white cursor-pointer font-medium font-cairo"
+          onClick={() => router.push(`/products/${_id}`)}
+        >
+          عرض التفاصيل
+        </Button>
       </div>
     </motion.div>
   );

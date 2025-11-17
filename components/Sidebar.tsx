@@ -11,6 +11,7 @@ import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useTheme } from "next-themes";
 import { useClickout } from "@/hooks/use-clickout";
+import Image from "next/image";
 
 const Sidebar = () => {
   const path = usePathname();
@@ -28,19 +29,20 @@ const Sidebar = () => {
     <div
       ref={sidebarRef}
       className={cn(
-        "w-64 aspect-square md:w-48 lg:w-56 min-h-svh h-full border-l z-30 fixed top-0 right-0 transition-transform duration-300 overflow-x-hidden translate-x-full md:translate-x-0 bg-background",
+        "w-64 md:w-48 lg:w-56 min-h-svh h-full border-l z-30 fixed top-0 right-0 transition-transform duration-300 overflow-x-hidden translate-x-full md:translate-x-0 bg-background",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
       <div className="w-full h-full overflow-y-hidden hover:overflow-y-auto flex flex-col justify-between">
         <div className="w-full">
-          <div className="border-b p-2 h-17 flex items-center">
-            <Link
-              href="/admin"
-              className="flex items-center gap-2 font-semibold text-xl font-tajawal text-primary px-2 hover:text-yellow-400 transition-colors"
-            >
-              <TreePalm size={30} />
-              <span>دار الواحة</span>
+          <div className="border-b h-20 p-2 flex items-center">
+            <Link href="/admin" className="mx-auto">
+              <Image
+                src="/images/logo.svg"
+                alt="logo"
+                width={185}
+                height={45}
+              />
             </Link>
           </div>
 

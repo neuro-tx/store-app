@@ -47,8 +47,9 @@ const PricingInfo = () => {
                   <Input
                     className="text-sm"
                     placeholder="١٠٠ جنيه"
-                    type="number"
-                    min={0}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     {...field}
                   />
                 </FormControl>
@@ -67,8 +68,9 @@ const PricingInfo = () => {
                   <Input
                     className="text-sm"
                     placeholder="٥٠ جنيه"
-                    type="number"
-                    min={0}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     {...field}
                   />
                 </FormControl>
