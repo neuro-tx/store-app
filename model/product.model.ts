@@ -1,4 +1,3 @@
-import { productSchema } from "@/lib/product-schema";
 import mongoose, { Schema, Model, Document } from "mongoose";
 import { ICategory } from "./category.model";
 

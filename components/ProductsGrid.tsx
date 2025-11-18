@@ -2,24 +2,12 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import ProductCard from "./ProductCard";
+import ProductCard, { ProductCardProps } from "./ProductCard";
 import { cn } from "@/lib/utils";
 
 interface ProductGridProps {
   cols?: string;
-  products: {
-    _id: string;
-    name: string;
-    description?: string;
-    price: number;
-    images: string[];
-    isAvailable?: boolean;
-    isFeatured?: boolean;
-    discount?: number;
-    hasDiscount?: boolean;
-    capacity?: string;
-    endDate?: Date;
-  }[];
+  products: ProductCardProps[];
 }
 
 const containerVariants = {
@@ -43,7 +31,7 @@ const ProductsGrid: React.FC<ProductGridProps> = ({ products, cols }) => {
       variants={containerVariants}
     >
       {products.map((product) => (
-        <ProductCard key={product._id} {...product} />
+        <ProductCard key={product._id} product={product} />
       ))}
     </motion.div>
   );

@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemedToaster } from "@/components/ThemedToaster ";
+import { ThemedToaster } from "@/components/ThemedToaster";
 import React from "react";
 import "../globals.css";
 

@@ -115,7 +115,7 @@ const CategoryList = ({ categories }: { categories: CategoryProps[] }) => {
 
               <CardContent className="px-3">
                 <Link
-                  href={`/category/${cate._id}?slug=${cate.slug}`}
+                  href={`/categories/${cate._id}?slug=${cate.slug}`}
                   className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-medium shadow-md text-sm flex items-center justify-center py-2 rounded-lg duration-200 transition-colors gap-1"
                 >
                   <ShoppingBag className="h-4 w-4" />

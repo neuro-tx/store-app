@@ -10,7 +10,7 @@ await dbConnect();
 
 const getAllProducts = async (req: Request) => {
   const { searchParams } = new URL(req.url);
-  const discount = searchParams.get("discount") || "fasle";
+  const discount = searchParams.get("discount") || "false";
   const features = searchParams.get("features")?.trim() || "false";
 
   const page = Math.max(1, parseInt(searchParams.get("page") || "1"));

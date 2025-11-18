@@ -32,9 +32,9 @@ export const Header = () => {
     if (currentScrollY === 0) {
       setIsVisible(true);
     } else if (currentScrollY > lastScrollY) {
-      setIsVisible(true);
-    } else if (currentScrollY < lastScrollY) {
       setIsVisible(false);
+    } else if (currentScrollY < lastScrollY) {
+      setIsVisible(true);
     }
 
     setLastScrollY(currentScrollY);
@@ -61,7 +61,7 @@ export const Header = () => {
       }
     };
     checker();
-  }, []);
+  }, [mainUrl]);
 
   return (
     <motion.header
@@ -87,7 +87,7 @@ export const Header = () => {
               "rounded-2xl border border-neutral-600 dark:border-neutral-600 max-w-5xl md:px-4 backdrop-blur-sm bg-back/50"
           )}
         >
-          <div className="relative flex flex-wrap items-center justify-between flex-row-reverse gap-6 py-3 md:gap-0 md:py-4">
+          <div className="relative flex flex-wrap items-center justify-between flex-row-reverse gap-6 py-3 md:gap-0 md:py-3">
             <div className="flex w-full md:w-auto justify-between items-center">
               <div className="inline-flex md:hidden">
                 <Tooltip>

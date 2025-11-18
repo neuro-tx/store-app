@@ -12,7 +12,7 @@ export async function middleware(req: NextRequest) {
     const admin = await adminCheck();
 
     if (!admin) {
-      return NextResponse.redirect(new URL("/not-found", req.url));
+      return NextResponse.redirect(new URL("/auth", req.url));
     }
 
     res.cookies.set("auth-role", "admin", {

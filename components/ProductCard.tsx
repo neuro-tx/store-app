@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-interface ProductCardProps {
+export interface ProductCardProps {
   _id: string;
   name: string;
   description?: string;
@@ -21,18 +21,10 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({
-  _id,
-  name,
-  description,
-  price,
-  images,
-  isAvailable = true,
-  isFeatured = false,
-  discount = 0,
-  hasDiscount = false,
-  capacity,
-  endDate,
-}: ProductCardProps) => {
+  product,
+}: {
+  product: ProductCardProps;
+}) => {
   const router = useRouter();
 
   function formatEndDate(endDate?: string | Date): string | null {
@@ -50,7 +42,7 @@ const ProductCard = ({
     });
   }
 
-  const formatted = formatEndDate(endDate);
+  const formatted = formatEndDate(product?.endDate);
 
   return (
     <motion.div
@@ -62,26 +54,26 @@ const ProductCard = ({
     >
       <div className="relative w-full h-64 overflow-hidden rounded-t-xl">
         <Image
-          src={images[0]}
-          alt={name}
+          src={product?.images[0]}
+          alt={product?.name}
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-102"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-70 group-hover:opacity-60 transition-opacity duration-500" />
 
         <div className="absolute top-2 left-2 flex flex-col gap-1">
-          {hasDiscount && (
+          {product?.hasDiscount && (
             <span className="bg-red-500 text-white text-xs px-2 py-1 rounded font-semibold">
-              خصم {discount} ج.م
+              خصم {product?.discount} ج.م
             </span>
           )}
-          {isFeatured && (
+          {product?.isFeatured && (
             <span className="bg-yellow-400 text-black text-xs px-2 py-1 rounded font-semibold">
               مميز
             </span>
           )}
-          {!isAvailable && (
+          {!product?.isAvailable && (
             <span className="bg-gray-600 text-white text-xs px-2 py-1 rounded font-semibold">
               غير متوفر
             </span>
@@ -91,35 +83,35 @@ const ProductCard = ({
 
       <div className="p-4 text-right relative space-y-2">
         <p className="text-lg font-semibold font-cairo text-neutral-100">
-          {name}
+          {product?.name}
         </p>
         <p className="text-sm text-neutral-500 mb-2 text-ellipsis line-clamp-2">
-          {description}
+          {product?.description}
         </p>
 
-        {capacity && (
-          <p className="text-sm text-neutral-400">السعة: {capacity}</p>
+        {product?.capacity && (
+          <p className="text-sm text-neutral-400">السعة: {product?.capacity}</p>
         )}
 
         <p className="text-base font-semibold text-neutral-300 flex items-center gap-3">
-          {hasDiscount ? (
+          {product?.hasDiscount ? (
             <>
               <span className="line-through text-red-500 mr-2">
-                {price} ج.م
+                {product?.price} ج.م
               </span>
-              <span>{price - discount} ج.م</span>
+              <span>{product?.price - (product?.discount || 0)} ج.م</span>
             </>
           ) : (
-            <span>{price} ج.م</span>
+            <span>{product?.price} ج.م</span>
           )}
         </p>
 
-        {hasDiscount && endDate && (
+        {product?.hasDiscount && product?.endDate && (
           <p className="text-xs text-red-500">ينتهي الخصم في: {formatted}</p>
         )}
         <Button
           className="mt-3 w-full text-white cursor-pointer font-medium font-cairo"
-          onClick={() => router.push(`/products/${_id}`)}
+          onClick={() => router.push(`/products/${product._id}`)}
         >
           عرض التفاصيل
         </Button>
