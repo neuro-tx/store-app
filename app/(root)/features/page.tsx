@@ -22,7 +22,7 @@ async function getFeaturedProducts() {
     if (!res.ok) return [];
 
     const data = await res.json();
-    return data.data;
+    return data.data || [];
   } catch (err) {
     console.error("Fetch featured products error:", err);
     return [];

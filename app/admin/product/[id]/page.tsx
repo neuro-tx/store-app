@@ -39,15 +39,15 @@ export default async function EditProduct({ params }: ProductParam) {
   }
 
   const defValues: ProductType = {
-    name: data.name || "",
-    category: data.category._id || "",
-    description: data.description || "",
+    name: data.name,
+    category: data.category._id,
+    description: data.description,
     images: data.images || [],
     brand: data.brand || "",
     discount: data.discount || 0,
     endDate: data.endDate || null,
-    isAvailable: data.isAvailable || true,
-    isFeatured: data.isFeatured || false,
+    isAvailable: data.isAvailable,
+    isFeatured: data.isFeatured,
     price: data.price || 0,
     capacity: data.capacity || "",
   };
