@@ -11,7 +11,7 @@ const createCat = async (request: Request) => {
   const data = await request.json();
 
   const validate = categorySchema.safeParse(data);
-  if (!validate.success){
+  if (!validate.success) {
     return fail(400, validate.error?.message || "بيانات غير صالحة.");
   }
 
@@ -19,12 +19,15 @@ const createCat = async (request: Request) => {
   return await categoryService.createCategory(catData);
 };
 
-const getCatById = async (id: string) => {
+const getProdsByCateId = async (id: string, slug: string) => {
   if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
-  return await categoryService.getCategoryById(id);
+  if (!slug) {
+    return fail(400, "معرّف الفئة غير محدد");
+  }
+  return await categoryService.getProductsById(id, slug);
 };
 
-const updateCat = async (id: string ,request: Request) => {
+const updateCat = async (id: string, request: Request) => {
   const data = await request.json();
   if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
 
@@ -43,7 +46,7 @@ const deleteCat = async (id: string) => {
 
 export const categoryController = {
   getCats,
-  getCatById,
+  getProdsByCateId,
   createCat,
   updateCat,
   deleteCat,

@@ -8,9 +8,13 @@ interface ReqProps {
   };
 }
 
-export const GET = errorHandler(async (_req: Request, { params }: ReqProps) => {
+export const GET = errorHandler(async (req: Request, { params }: ReqProps) => {
   const { id } = await params;
-  return categoryController.getCatById(id);
+
+  const url = new URL(req.url);
+  const slug = url.searchParams.get("slug") || "";
+
+  return categoryController.getProdsByCateId(id, slug);
 });
 
 export const PUT = errorHandler(async (req: Request, { params }: ReqProps) => {

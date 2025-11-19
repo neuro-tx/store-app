@@ -237,7 +237,6 @@ export const getCategoryTable = async (req: Request) => {
 export const getNextDayExpired = async (req: Request) => {
   const { searchParams } = new URL(req.url);
 
-  // Pagination
   const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
   const limit = Math.max(1, parseInt(searchParams.get("limit") || "10"));
   const search = searchParams.get("search")?.trim() || "";
@@ -245,7 +244,6 @@ export const getNextDayExpired = async (req: Request) => {
   const now = new Date();
   const next24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
-  // Build filter
   const matchFilter: any = {
     hasDiscount: true,
     endDate: { $gte: now, $lte: next24h },
@@ -254,13 +252,12 @@ export const getNextDayExpired = async (req: Request) => {
   if (search) {
     matchFilter.$or = [
       { name: { $regex: search, $options: "i" } },
-      { description: { $regex: search, $options: "i" } }, // optional if you have description
+      { description: { $regex: search, $options: "i" } },
     ];
   }
 
   const skip = (page - 1) * limit;
 
-  // Get total count and paginated results in parallel
   const [totalItems, products] = await Promise.all([
     Product.countDocuments(matchFilter),
     Product.find(matchFilter)
@@ -270,7 +267,6 @@ export const getNextDayExpired = async (req: Request) => {
       .select("_id name images discount price hasDiscount isFeatured endDate"),
   ]);
 
-  // Add duration field
   const productsWithDuration = products.map((product) => {
     const durationMs = product.endDate.getTime() - now.getTime();
     const hours = Math.floor(durationMs / (1000 * 60 * 60));

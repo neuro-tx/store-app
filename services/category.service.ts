@@ -92,10 +92,23 @@ const deleteProductsByCatId = async (catId: string): Promise<boolean> => {
     }
 
     await Product.deleteMany({ category: catId });
-    return true
+    return true;
   } catch (error) {
     console.error("❌ Error deleting products:", error);
-    return false
+    return false;
+  }
+};
+
+const getProductsById = async (id: string, slug: string) => {
+  try {
+    const data = await Category.findBySlugWithProducts(slug);
+    if (!data) {
+      return success([], 404, "الفئة غير موجودة أو لا تحتوي على منتجات");
+    }
+    return success(data, 200);
+  } catch (err) {
+    console.error("getProductsById error:", err);
+    return fail(500, "حدث خطأ أثناء جلب المنتجات");
   }
 };
 
@@ -105,4 +118,5 @@ export const categoryService = {
   createCategory,
   updateCategory,
   deleteCategory,
+  getProductsById,
 };
