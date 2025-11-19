@@ -11,7 +11,7 @@ interface ParamsProps {
   };
 }
 
-export const revalidate = 60;
+export const revalidate = 500;
 export const dynamicParams = true;
 
 async function getProduct(id: string) {
@@ -22,7 +22,7 @@ async function getProduct(id: string) {
       }/api/product/${id}`,
       {
         next: {
-          revalidate: 60,
+          revalidate: 500,
           tags: ["product"],
         },
       }

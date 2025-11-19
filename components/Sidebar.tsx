@@ -3,10 +3,9 @@
 import { ADMIN_LINKS } from "@/data/admin";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { cn } from "@/lib/utils";
-import { TreePalm } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useTheme } from "next-themes";
@@ -38,7 +37,7 @@ const Sidebar = () => {
           <div className="border-b h-20 p-2 flex items-center">
             <Link href="/admin" className="mx-auto">
               <Image
-                src="/images/logo.svg"
+                src={theme === "dark" ? "/images/logo.svg" : "/images/dark.svg"}
                 alt="logo"
                 width={185}
                 height={45}

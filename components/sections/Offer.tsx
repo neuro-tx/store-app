@@ -14,7 +14,7 @@ const Offer = async () => {
 
   try {
     const [featuredRes, latestRes] = await Promise.all([
-      fetch(featuredUrl, { next: { revalidate: 3600 }, cache: "force-cache" }),
+      fetch(featuredUrl, { next: { revalidate: 500 }, cache: "force-cache" }),
       fetch(latestUrl, { next: { revalidate: 1000 }, cache: "force-cache" }),
     ]);
 

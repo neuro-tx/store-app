@@ -3,6 +3,7 @@ import DashboardCards from "./_components/DashboardCards";
 import { AdminChart } from "@/components/AdminChart";
 import ProductTable from "./_components/ProductTable";
 import CategoryTable from "./_components/CategoryTable";
+import ExpiringTable from "./_components/ExpiringTable";
 
 const page = async () => {
   return (
@@ -14,6 +15,7 @@ const page = async () => {
             <AdminChart />
             <ProductTable />
             <CategoryTable />
+            <ExpiringTable />
           </div>
         </div>
       </div>
