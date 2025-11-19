@@ -136,9 +136,11 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
               <span className="text-sm font-medium">
                 ينتهي العرض في:{" "}
                 {new Date(product.endDate).toLocaleDateString("ar-EG", {
-                  year: "numeric",
+                  day: "2-digit",
                   month: "long",
-                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
                 })}
               </span>
             </div>

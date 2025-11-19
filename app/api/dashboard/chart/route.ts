@@ -1,4 +1,4 @@
-import { getChartData } from "@/features/dashborad";
+import { getChartData } from "@/controller/dashborad.controller";
 import { errorHandler } from "@/lib/errorHandler";
 import { success } from "@/lib/states";
 

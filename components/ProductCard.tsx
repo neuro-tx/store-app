@@ -20,29 +20,8 @@ export interface ProductCardProps {
   endDate?: Date;
 }
 
-const ProductCard = ({
-  product,
-}: {
-  product: ProductCardProps;
-}) => {
+const ProductCard = ({ product }: { product: ProductCardProps }) => {
   const router = useRouter();
-
-  function formatEndDate(endDate?: string | Date): string | null {
-    if (!endDate) return null;
-
-    const date = new Date(endDate);
-    if (isNaN(date.getTime())) return null;
-
-    return date.toLocaleDateString("ar-EG", {
-      day: "2-digit",
-      month: "long",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  }
-
-  const formatted = formatEndDate(product?.endDate);
 
   return (
     <motion.div
@@ -106,9 +85,6 @@ const ProductCard = ({
           )}
         </p>
 
-        {product?.hasDiscount && product?.endDate && (
-          <p className="text-xs text-red-500">ينتهي الخصم في: {formatted}</p>
-        )}
         <Button
           className="mt-3 w-full text-white cursor-pointer font-medium font-cairo"
           onClick={() => router.push(`/products/${product._id}`)}
