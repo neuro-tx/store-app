@@ -40,10 +40,15 @@ const deleteProduct = async (id: string) => {
   return await productServices.deleteProduct(id);
 };
 
+const getProdsWithFilter = async(req:Request) => {
+  return await productServices.getProductsWithFilter(req);
+}
+
 export const productController = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  getProdsWithFilter
 };

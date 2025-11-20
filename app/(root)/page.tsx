@@ -8,7 +8,7 @@ import AboutPreview from "@/components/AboutPreview";
 
 export default async function Home() {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
+    <main className="min-h-screen w-full overflow-x-hidden">
       <Hero />
       <Showcase />
       <CategoriesSection />
@@ -16,6 +16,6 @@ export default async function Home() {
       <Offer />
       <Features />
       <AboutPreview />
-    </div>
+    </main>
   );
 }

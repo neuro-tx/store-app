@@ -134,7 +134,7 @@ export default async function ProductPage({ params }: ParamsProps) {
 
   return (
     <>
-      <main className="pt-24 bg-gradient-to-b from-gray-50 to-white dark:from-neutral-900 dark:to-neutral-950">
+      <div className="pt-24 bg-gradient-to-b from-gray-50 to-white dark:from-neutral-900 dark:to-neutral-950">
         <div className="container mx-auto px-4 py-8 lg:py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             <ProductGallery
@@ -149,7 +149,7 @@ export default async function ProductPage({ params }: ParamsProps) {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </>
   );
 }
