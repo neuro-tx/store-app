@@ -14,7 +14,11 @@ export const GET = errorHandler(async (req: Request, { params }: ReqProps) => {
   const url = new URL(req.url);
   const slug = url.searchParams.get("slug") || "";
 
-  return categoryController.getProdsByCateId(id, slug);
+  if (!slug) {
+    return categoryController.getCatById(id);
+  } else {
+    return categoryController.getProdsByCateId(id, slug);
+  }
 });
 
 export const PUT = errorHandler(async (req: Request, { params }: ReqProps) => {

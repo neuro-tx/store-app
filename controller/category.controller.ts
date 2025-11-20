@@ -7,6 +7,11 @@ const getCats = async (request: Request) => {
   return await categoryService.getCategories();
 };
 
+const getCatById = async (id: string) => {
+  if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
+  return await categoryService.getCategoryById(id)
+}
+
 const createCat = async (request: Request) => {
   const data = await request.json();
 
@@ -46,6 +51,7 @@ const deleteCat = async (id: string) => {
 
 export const categoryController = {
   getCats,
+  getCatById,
   getProdsByCateId,
   createCat,
   updateCat,

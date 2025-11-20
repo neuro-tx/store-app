@@ -12,6 +12,7 @@ import {
 import ProductsGrid from "@/components/ProductsGrid";
 import { ProductCardProps } from "../ProductCard";
 import { Loader } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface CategoryProps {
   _id: string;
@@ -45,8 +46,14 @@ const ShowProducts = () => {
   const [sortField, setSortField] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(16);
-  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(12);
+
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 16,
+    total: 0,
+    totalPages: 0,
+  });
 
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
@@ -77,7 +84,14 @@ const ShowProducts = () => {
         });
 
         const data = await res.json();
-        setProducts(data?.data?.products || []);
+        if (data.success) {
+          setProducts(data.data.products || []);
+          setPagination((prev) => ({
+            ...prev,
+            total: data.data.pagination.total,
+            totalPages: data.data.pagination.totalPages,
+          }));
+        }
       } catch (err) {
         console.error("Error fetching products:", err);
         setProducts([]);
@@ -277,6 +291,65 @@ const ShowProducts = () => {
       ) : (
         <ProductsGrid products={products} />
       )}
+
+      <div className="flex flex-row justify-between items-center gap-4 mt-6">
+        <div className="text-sm text-muted-foreground">
+          عرض{" "}
+          <span className="font-medium">
+            {Math.min(
+              (pagination.page - 1) * pagination.limit + 1,
+              pagination.total
+            )}
+          </span>{" "}
+          إلى{" "}
+          <span className="font-medium">
+            {Math.min(pagination.page * pagination.limit, pagination.total)}
+          </span>{" "}
+          من <span className="font-medium">{pagination.total}</span> نتائج
+        </div>
+
+        <div className="flex justify-center items-center gap-2 flex-wrap">
+          <Button
+            variant="outline"
+            disabled={pagination.page === 1 || products.length === 0}
+            onClick={() =>
+              pagination.page !== 1 &&
+              setPagination({ ...pagination, page: pagination.page - 1 })
+            }
+          >
+            السابق
+          </Button>
+
+          {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+            (p) => (
+              <Button
+                key={p}
+                variant={pagination.page === p ? "default" : "outline"}
+                size="sm"
+                onClick={() =>
+                  pagination.page !== p &&
+                  setPagination({ ...pagination, page: p })
+                }
+              >
+                {p}
+              </Button>
+            )
+          )}
+
+          <Button
+            variant="outline"
+            disabled={
+              pagination.page === pagination.totalPages || products.length === 0
+            }
+            onClick={() =>
+              pagination.page !== pagination.totalPages &&
+              setPagination({ ...pagination, page: pagination.page + 1 })
+            }
+          >
+            التالي
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
