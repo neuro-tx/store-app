@@ -16,7 +16,7 @@ export const metadata = {
 
 const ProductsPage = () => {
   return (
-    <main className="pt-24 pb-32 overflow-x-hidden">
+    <main className="py-24 overflow-x-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="space-y-10">
           <section className="text-center">

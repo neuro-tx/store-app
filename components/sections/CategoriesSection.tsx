@@ -13,15 +13,16 @@ async function getCategories() {
 
     if (!res.ok) throw new Error("Failed to fetch categories");
     const data = await res.json();
-    return data?.data || [];
+    return { categories: data?.data || [], error: false };
   } catch (error) {
     console.error("Error loading categories:", error);
-    return [];
+    return { categories: [], error: true };
   }
 }
 
 const CategoriesSection = async () => {
-  const categories = await getCategories();
+  const { categories, error } = await getCategories();
+  let noData = !error && categories.length === 0;
 
   return (
     <section className="relative w-full bg-neutral-900 py-20 px-3 md:px-6 lg:px-8 overflow-x-hidden">
@@ -48,13 +49,23 @@ const CategoriesSection = async () => {
         </Link>
       </div>
 
-      <Suspense
-        fallback={
-          <p className="text-center text-neutral-400">جارٍ تحميل الفئات...</p>
-        }
-      >
-        <CatsView categories={categories} />
-      </Suspense>
+      {error ? (
+        <p className="text-center text-red-500 text-lg font-cairo mt-10">
+          حدث خطأ أثناء تحميل الفئات. يرجى المحاولة لاحقًا.
+        </p>
+      ) : noData ? (
+        <p className="text-center text-yellow-500 text-lg font-cairo mt-10">
+          لا توجد فئات متاحة حاليًا.
+        </p>
+      ) : (
+        <Suspense
+          fallback={
+            <p className="text-center text-neutral-400">جارٍ تحميل الفئات...</p>
+          }
+        >
+          <CatsView categories={categories} />
+        </Suspense>
+      )}
     </section>
   );
 };

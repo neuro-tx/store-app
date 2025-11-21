@@ -17,8 +17,8 @@ import { Button } from "../ui/button";
 interface CategoryProps {
   _id: string;
   name: string;
-  description: string;
   slug: string;
+  description: string;
   image: string;
 }
 
@@ -32,12 +32,12 @@ type ProductFilterOption =
 
 const ShowProducts = () => {
   const [products, setProducts] = useState<ProductCardProps[]>([]);
-  const [categoreis, setCategoreis] = useState<CategoryProps[]>([]);
+  const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingCat, setLoadingCat] = useState(true);
+  const [error, setError] = useState(false);
 
   const [search, setSearch] = useState("");
-
   const [category, setCategory] = useState("");
   const [discount, setDiscount] = useState(false);
   const [features, setFeatures] = useState(false);
@@ -47,15 +47,24 @@ const ShowProducts = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(12);
-
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 16,
+    limit: 12,
     total: 0,
     totalPages: 0,
   });
-
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  const hasFiltersApplied = useMemo(
+    () =>
+      !!search ||
+      !!category ||
+      discount ||
+      features ||
+      minPrice > 0 ||
+      maxPrice < 999999,
+    [search, category, discount, features, minPrice, maxPrice]
+  );
 
   const buildFetchUrl = () => {
     const params = new URLSearchParams();
@@ -69,7 +78,6 @@ const ShowProducts = () => {
     params.append("order", sortOrder);
     params.append("page", page.toString());
     params.append("limit", limit.toString());
-
     return `/api/product/match?${params.toString()}`;
   };
 
@@ -78,69 +86,84 @@ const ShowProducts = () => {
       try {
         const baseUrl =
           process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
         const res = await fetch(`${baseUrl}/${buildFetchUrl()}`, {
           cache: "no-store",
         });
 
+        if (!res.ok) {
+          setError(true);
+          setProducts([]);
+          setPagination({ page: 1, limit, total: 0, totalPages: 0 });
+          return;
+        }
+
         const data = await res.json();
         if (data.success) {
           setProducts(data.data.products || []);
-          setPagination((prev) => ({
-            ...prev,
+          setPagination({
+            page,
+            limit,
             total: data.data.pagination.total,
             totalPages: data.data.pagination.totalPages,
-          }));
+          });
         }
       } catch (err) {
         console.error("Error fetching products:", err);
+        setError(true);
         setProducts([]);
+        setPagination({ page: 1, limit, total: 0, totalPages: 0 });
       } finally {
         setLoading(false);
       }
     }
 
-    setPage(1);
     getProducts();
   }, [
     debouncedSearch,
     category,
     discount,
+    features,
     minPrice,
     maxPrice,
     sortField,
     sortOrder,
     page,
     limit,
-    features,
   ]);
 
   useEffect(() => {
-    const getCats = async () => {
+    async function getCats() {
       const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
       try {
         const res = await fetch(`${baseUrl}/api/category`);
-        if (!res.ok) {
-          setCategoreis([]);
-        }
+        if (!res.ok) setCategories([]);
         const data = await res.json();
-        console.log(data);
-        setCategoreis(data?.data || []);
-      } catch (error) {
-        setCategoreis([]);
+        setCategories(data?.data || []);
+      } catch (err) {
+        setCategories([]);
       } finally {
         setLoadingCat(false);
       }
-    };
-
+    }
     getCats();
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedSearch(search), 500);
+    return () => clearTimeout(timeout);
+  }, [search]);
 
   const actions: Record<ProductFilterOption, () => void> = {
     latest: () => {
       setSortField("createdAt");
       setSortOrder("desc");
+      setDiscount(false);
+      setFeatures(false);
+    },
+    oldest: () => {
+      setSortField("createdAt");
+      setSortOrder("asc");
       setDiscount(false);
       setFeatures(false);
     },
@@ -164,29 +187,40 @@ const ShowProducts = () => {
       setDiscount(false);
       setFeatures(false);
     },
-    oldest: () => {
-      setSortField("createdAt");
-      setSortOrder("asc");
-      setDiscount(false);
-      setFeatures(false);
-    },
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
+  const isEmptyDB = products.length === 0 && !hasFiltersApplied;
+  const isEmptyFiltered = products.length === 0 && hasFiltersApplied;
+  const emptyState = isEmptyDB || isEmptyFiltered;
+  const emptyIcon = isEmptyDB ? "📦" : "⭐";
+  const emptyTitle = isEmptyDB
+    ? "لا توجد منتجات متاحة حالياً"
+    : "لا توجد منتجات مطابقة";
+  const emptyDesc = isEmptyDB
+    ? "نحن نعمل على إضافة المزيد قريباً."
+    : "حاول تعديل معايير البحث أو التصفية.";
+  const emptyDescClass = isEmptyDB
+    ? "text-fuchsia-500 font-medium"
+    : "text-gray-400";
 
-    return () => clearTimeout(timeout);
-  }, [search]);
-
+  // Render
   if (loading) {
     return (
       <div className="text-center flex items-center justify-center flex-col py-20">
-        <div className="mb-3.5">
-          <Loader className="animate-spin text-primary size-7" />
-        </div>
+        <Loader className="animate-spin text-primary size-7 mb-3.5" />
         <p className="text-muted-foreground">جاري تحميل المنتجات…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-20 border border-red-500 rounded-xl">
+        <div className="text-5xl mb-4">⚠️</div>
+        <p className="text-lg text-red-500">حدث خطأ أثناء جلب المنتجات</p>
+        <p className="text-sm text-gray-400 mt-2">
+          حدث خطأ من الخادم أو أثناء الاتصال، يرجى المحاولة لاحقاً.
+        </p>
       </div>
     );
   }
@@ -200,7 +234,6 @@ const ShowProducts = () => {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full lg:max-w-xl xl:max-w-2xl"
         />
-
         <div className="grid grid-cols-3 gap-3 w-full">
           <Select
             onValueChange={(value) => {
@@ -243,29 +276,22 @@ const ShowProducts = () => {
               <SelectItem value="50-100">50 - 100</SelectItem>
               <SelectItem value="100-250">100 - 250</SelectItem>
               <SelectItem value="250-400">250 - 400</SelectItem>
-              <SelectItem value="400-999999">اعلي من 400</SelectItem>
+              <SelectItem value="400-999999">أعلى من 400</SelectItem>
             </SelectContent>
           </Select>
 
           <Select
-            onValueChange={(value) => {
-              if (value === "all") {
-                setCategory("");
-              } else {
-                setCategory(value);
-              }
-            }}
+            onValueChange={(value) => setCategory(value === "all" ? "" : value)}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="الفئة" />
             </SelectTrigger>
-
             <SelectContent align="start" className="max-h-52">
               <SelectItem value="all">كل الفئات</SelectItem>
               {loadingCat ? (
                 <p className="text-center p-1 text-sm">جارِ التحميل ...</p>
-              ) : categoreis && categoreis.length > 0 ? (
-                categoreis.map((cat: any) => (
+              ) : categories.length > 0 ? (
+                categories.map((cat) => (
                   <SelectItem key={cat.slug} value={cat._id}>
                     {cat.name}
                   </SelectItem>
@@ -280,76 +306,66 @@ const ShowProducts = () => {
         </div>
       </div>
 
-      {products.length === 0 ? (
-        <div className="text-center py-20 border border-primary rounded-xl">
-          <div className="text-5xl mb-4">⭐</div>
-          <p className="text-lg text-amber-500">لا توجد منتجات مطابقة</p>
-          <p className="text-sm text-gray-400 mt-2">
-            حاول تعديل معايير البحث أو التصفية.
-          </p>
+      {emptyState ? (
+        <div className="text-center py-24 border border-primary rounded-xl">
+          <div className="text-6xl mb-4">{emptyIcon}</div>
+          <p className={`text-xl font-semibold text-amber-600`}>{emptyTitle}</p>
+          <p className={`text-sm mt-2 ${emptyDescClass}`}>{emptyDesc}</p>
         </div>
       ) : (
         <ProductsGrid products={products} />
       )}
 
-      <div className="flex flex-row justify-between items-center gap-4 mt-6">
-        <div className="text-sm text-muted-foreground">
-          عرض{" "}
-          <span className="font-medium">
-            {Math.min(
-              (pagination.page - 1) * pagination.limit + 1,
-              pagination.total
+      {products.length > 0 && (
+        <div className="flex flex-row justify-between items-center gap-4 mt-6 flex-wrap">
+          <div className="text-sm text-muted-foreground">
+            عرض{" "}
+            <span className="font-medium">
+              {Math.min(
+                (pagination.page - 1) * pagination.limit + 1,
+                pagination.total
+              )}
+            </span>{" "}
+            إلى{" "}
+            <span className="font-medium">
+              {Math.min(pagination.page * pagination.limit, pagination.total)}
+            </span>{" "}
+            من <span className="font-medium">{pagination.total}</span> نتائج
+          </div>
+          <div className="flex justify-center items-center gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              disabled={pagination.page === pagination.totalPages}
+              onClick={() =>
+                setPagination({ ...pagination, page: pagination.page + 1 })
+              }
+            >
+              التالي
+            </Button>
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+              (p) => (
+                <Button
+                  key={p}
+                  variant={pagination.page === p ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setPagination({ ...pagination, page: p })}
+                >
+                  {p}
+                </Button>
+              )
             )}
-          </span>{" "}
-          إلى{" "}
-          <span className="font-medium">
-            {Math.min(pagination.page * pagination.limit, pagination.total)}
-          </span>{" "}
-          من <span className="font-medium">{pagination.total}</span> نتائج
+            <Button
+              variant="outline"
+              disabled={pagination.page === 1}
+              onClick={() =>
+                setPagination({ ...pagination, page: pagination.page - 1 })
+              }
+            >
+              السابق
+            </Button>
+          </div>
         </div>
-
-        <div className="flex justify-center items-center gap-2 flex-wrap">
-          <Button
-            variant="outline"
-            disabled={pagination.page === 1 || products.length === 0}
-            onClick={() =>
-              pagination.page !== 1 &&
-              setPagination({ ...pagination, page: pagination.page - 1 })
-            }
-          >
-            السابق
-          </Button>
-
-          {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
-            (p) => (
-              <Button
-                key={p}
-                variant={pagination.page === p ? "default" : "outline"}
-                size="sm"
-                onClick={() =>
-                  pagination.page !== p &&
-                  setPagination({ ...pagination, page: p })
-                }
-              >
-                {p}
-              </Button>
-            )
-          )}
-
-          <Button
-            variant="outline"
-            disabled={
-              pagination.page === pagination.totalPages || products.length === 0
-            }
-            onClick={() =>
-              pagination.page !== pagination.totalPages &&
-              setPagination({ ...pagination, page: pagination.page + 1 })
-            }
-          >
-            التالي
-          </Button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

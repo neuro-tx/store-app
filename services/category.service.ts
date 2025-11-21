@@ -103,7 +103,7 @@ const getProductsById = async (id: string, slug: string) => {
   try {
     const data = await Category.findBySlugWithProducts(slug);
     if (!data) {
-      return success([], 404, "الفئة غير موجودة أو لا تحتوي على منتجات");
+      return success(null, 404, "الفئة غير موجودة أو لا تحتوي على منتجات");
     }
     return success(data, 200);
   } catch (err) {

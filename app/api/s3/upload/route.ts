@@ -22,8 +22,7 @@ export async function POST(req: Request) {
     }
 
     const { fileName, size, contentType ,dirName } = validate.data;
-    const key = `${dirName}/${Date.now()}-${fileName}`;
-    console.log(fileName, size, contentType);
+    const key = `${dirName}/${size}-${fileName}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME!,

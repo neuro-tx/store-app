@@ -11,6 +11,7 @@ const Offer = async () => {
   let featuredProducts: any[] = [];
   let latestProducts: any[] = [];
   let errorMessage = "";
+  let emptyMessage = "";
 
   try {
     const [featuredRes, latestRes] = await Promise.all([
@@ -19,9 +20,7 @@ const Offer = async () => {
     ]);
 
     if (!featuredRes.ok || !latestRes.ok) {
-      throw new Error(
-        `HTTP Error: ${featuredRes.status} / ${latestRes.status}`
-      );
+      emptyMessage = "لا توجد منتجات متاحة حالياً.";
     }
 
     const [featuredData, latestData] = await Promise.all([
@@ -29,11 +28,11 @@ const Offer = async () => {
       latestRes.json(),
     ]);
 
-    if (!featuredData?.data?.length && !latestData?.data?.length) {
-      errorMessage = "لم يتم العثور على منتجات في الوقت الحالي.";
-    } else {
-      featuredProducts = featuredData?.data ?? [];
-      latestProducts = latestData?.data ?? [];
+    featuredProducts = featuredData?.data ?? [];
+    latestProducts = latestData?.data ?? [];
+
+    if (!featuredProducts.length && !latestProducts.length) {
+      emptyMessage = "لا توجد منتجات متاحة حالياً.";
     }
   } catch (error) {
     console.error("❌ Offer section fetch error:", error);
@@ -64,9 +63,13 @@ const Offer = async () => {
             <p className="text-center text-red-500 text-lg mt-6 font-cairo">
               {errorMessage}
             </p>
+          ) : emptyMessage ? (
+            <p className="text-center text-yellow-500 text-lg mt-6 font-cairo">
+              {emptyMessage}
+            </p>
           ) : (
             <>
-              {/* Featured & Discounted Section */}
+              {/* Featured & Discounted */}
               <div className="space-y-6">
                 <AnimatedText>
                   <h4 className="text-xl font-cooper font-semibold text-neutral-300 text-center">
@@ -76,7 +79,7 @@ const Offer = async () => {
                 <ProductsGrid products={featuredProducts} />
               </div>
 
-              {/* Latest Products Section */}
+              {/* Latest */}
               <div className="space-y-6">
                 <AnimatedText>
                   <h4 className="text-xl font-cooper font-semibold text-neutral-300 text-center mt-16">
@@ -88,14 +91,16 @@ const Offer = async () => {
             </>
           )}
 
-          <div className="w-fit mx-auto text-center">
-            <RouterBtn
-              cls="px-5 py-1.5 bg-primary text-white rounded-md font-cairo transition duration-200 hover:opacity-90 cursor-pointer hover:underline text-base font-medium"
-              path="/products"
-            >
-              عرض المزيد من المنتجات
-            </RouterBtn>
-          </div>
+          {!errorMessage && !emptyMessage && (
+            <div className="w-fit mx-auto text-center">
+              <RouterBtn
+                cls="px-5 py-1.5 bg-primary text-white rounded-md font-cairo transition duration-200 hover:opacity-90 cursor-pointer hover:underline text-base font-medium"
+                path="/products"
+              >
+                عرض المزيد من المنتجات
+              </RouterBtn>
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CategoryProps {
   _id: string;
@@ -50,6 +51,7 @@ const CatsView = ({ categories }: CategoriesGridProps) => {
           variants={cardVariants}
           className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer"
         >
+          <Link href={`/categories/${cat._id}?slug=${cat.slug}`}>
           <div className="absolute inset-0">
             <Image
               src={cat.image}
@@ -68,6 +70,7 @@ const CatsView = ({ categories }: CategoriesGridProps) => {
               {cat.description}
             </p>
           </div>
+          </Link>
         </motion.div>
       ))}
     </motion.div>

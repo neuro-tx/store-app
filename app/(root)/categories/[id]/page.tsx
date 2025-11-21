@@ -73,6 +73,24 @@ export default async function CatePage({ params, searchParams }: ParamsProps) {
     );
   }
 
+  if (products.length === 0) {
+    return (
+      <div className="w-full pt-32 pb-16 text-center px-3 md:px-6 lg:px-8">
+        <div className="container py-40 rounded-xl border mx-auto">
+          <h1 className="text-3xl font-bold mb-4">
+            لا توجد منتجات في هذه الفئة
+          </h1>
+          <p className="text-muted-foreground my-2">
+            فئة: <span className="font-bold underline text-emerald-500 underline-offset-2">{data.name}</span>
+          </p>
+          <p className="text-sm text-primary font-medium">
+            نعمل على إضافة المزيد قريباً — يرجى التحقق لاحقاً.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full overflow-x-hidden">
       <div className="container mx-auto py-32 px-3 md:px-6 lg:px-8">
