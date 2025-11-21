@@ -37,7 +37,13 @@ const Sidebar = () => {
           <div className="border-b h-20 p-2 flex items-center">
             <Link href="/admin" className="mx-auto">
               <Image
-                src={theme === "dark" ? "/images/logo.svg" : "/images/dark.svg"}
+                src={
+                  mounted && theme
+                    ? theme === "dark"
+                      ? "/images/logo.svg"
+                      : "/images/dark.svg"
+                    : "/images/logo.svg"
+                }
                 alt="logo"
                 width={185}
                 height={45}

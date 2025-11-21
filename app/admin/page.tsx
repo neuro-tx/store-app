@@ -4,8 +4,11 @@ import { AdminChart } from "@/components/AdminChart";
 import ProductTable from "./_components/ProductTable";
 import CategoryTable from "./_components/CategoryTable";
 import ExpiringTable from "./_components/ExpiringTable";
+import { syncProducts } from "./actions";
 
 const page = async () => {
+  await syncProducts();
+
   return (
     <div className="w-full min-h-svh">
       <div className="container mx-auto">
