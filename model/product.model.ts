@@ -14,6 +14,7 @@ export interface IProduct extends Document {
   category: mongoose.Types.ObjectId;
   hasDiscount: boolean;
   endDate: Date;
+  features: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -68,6 +69,14 @@ const ProductSchema = new Schema<IProduct>(
         },
         message: "يجب تحديد تاريخ انتهاء الخصم عند وجود خصم.",
       },
+    },
+    features: {
+      type: [String],
+      validate: {
+        validator: (arr: string[]) => Array.isArray(arr) && arr.length >= 3,
+        message: "يجب أن يحتوي المنتج على 3 مميزات على الأقل",
+      },
+      required: true,
     },
   },
   {

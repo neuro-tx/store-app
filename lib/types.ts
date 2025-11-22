@@ -19,4 +19,5 @@ export interface ProductCardProps {
   capacity?: string;
   hasDiscount?: boolean;
   endDate?: Date;
+  features: string[]
 }

@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 import Uploader from "./Uploader";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Loader, Save } from "lucide-react";
+import { Loader, Save, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -342,6 +342,78 @@ const ProductEditForm = ({
                   انتهاء.
                 </FormDescription>
               </CardFooter>
+            </Card>
+            <Card>
+              <CardHeader className="border-b">
+                <CardTitle className="font-cairo font-semibold text-lg">
+                  مميزات المنتج
+                </CardTitle>
+                <CardDescription className="text-sm text-muted-foreground">
+                  قم بتحديث مميزات المنتج أو إضافة المزيد.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-3">
+                {form.watch("features")?.map((_, index) => (
+                  <FormField
+                    key={index}
+                    control={form.control}
+                    name={`features.${index}`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold mb-2">
+                          الميزة رقم {index + 1}
+                        </FormLabel>
+
+                        <div className="flex items-center gap-3">
+                          <FormControl className="flex-1">
+                            <Input
+                              {...field}
+                              placeholder={`الميزة ${index + 1}`}
+                              className="text-sm"
+                            />
+                          </FormControl>
+
+                          {form.watch("features").length > 3 && (
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon-sm"
+                              onClick={() => {
+                                const updated = form
+                                  .watch("features")
+                                  .filter((_: any, i: number) => i !== index);
+
+                                form.setValue("features", updated, {
+                                  shouldDirty: true,
+                                });
+                              }}
+                              className="whitespace-nowrap cursor-pointer"
+                            >
+                              <Trash className="size-4" />
+                            </Button>
+                          )}
+                        </div>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    form.setValue("features", [...form.watch("features"), ""], {
+                      shouldDirty: true,
+                    });
+                  }}
+                  className="mt-2"
+                >
+                  إضافة ميزة جديدة
+                </Button>
+              </CardContent>
             </Card>
           </div>
 

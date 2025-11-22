@@ -199,6 +199,31 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           {product.description}
         </p>
       </motion.div>
+      {product.features && product.features.length > 0 && (
+        <motion.div
+          className="space-y-5 mt-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1 }}
+        >
+          <h2 className="text-2xl font-bold text-white">مميزات المنتج</h2>
+
+          <div className="bg-gradient-to-br from-slate-900/40 to-slate-800/30 p-5 rounded-2xl space-y-3 border border-slate-700/30">
+            {product.features.map((feature, idx) => (
+              <motion.div
+                key={idx}
+                className="flex items-center gap-3 py-px"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.1 + idx * 0.1 }}
+              >
+                <CheckCircle2 className="text-green-400" size={22} />
+                <span className="text-lg leading-relaxed text-green-200">{feature}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

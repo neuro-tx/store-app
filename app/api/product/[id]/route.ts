@@ -10,7 +10,7 @@ interface ReqProps {
 
 export const GET = errorHandler(async (req: Request, { params }: ReqProps) => {
   const { id } = await params;
-  return await productController.getProductById(id);
+  return await productController.getProductById(id ,req);
 });
 
 export const PUT = errorHandler(async (req: Request, { params }: ReqProps) => {

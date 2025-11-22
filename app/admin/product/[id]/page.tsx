@@ -11,7 +11,7 @@ export default async function EditProduct({ params }: ProductParam) {
   const { id } = await params;
   const BAIS_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  const res = await fetch(`${BAIS_URL}/api/product/${id}`, {
+  const res = await fetch(`${BAIS_URL}/api/product/${id}?recommends=false`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
@@ -37,19 +37,21 @@ export default async function EditProduct({ params }: ProductParam) {
       </div>
     );
   }
+  const product = data.product;
 
   const defValues: ProductType = {
-    name: data.name,
-    category: data.category._id,
-    description: data.description,
-    images: data.images || [],
-    brand: data.brand || "",
-    discount: data.discount || 0,
-    endDate: data.endDate || null,
-    isAvailable: data.isAvailable,
-    isFeatured: data.isFeatured,
-    price: data.price || 0,
-    capacity: data.capacity || "",
+    name: product.name,
+    category: product.category,
+    description: product.description,
+    images: product.images || [],
+    brand: product.brand || "",
+    discount: product.discount || 0,
+    endDate: product.endDate || null,
+    isAvailable: product.isAvailable,
+    isFeatured: product.isFeatured,
+    price: product.price || 0,
+    capacity: product.capacity || "",
+    features: product?.features || ["", "", ""],
   };
 
   return (

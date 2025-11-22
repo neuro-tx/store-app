@@ -7,9 +7,11 @@ const getProducts = async (request: Request) => {
   return await productServices.getAllProducts(request);
 };
 
-const getProductById = async (id: string) => {
+const getProductById = async (id: string ,req:Request) => {
   if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
-  return await productServices.getProductById(id);
+  const {searchParams} = new URL(req.url);
+  const getRecommends = searchParams.get("recommends")?.trim() || false;
+  return await productServices.getProductById(id ,getRecommends as boolean);
 };
 
 const createProduct = async (request: Request) => {

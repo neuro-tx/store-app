@@ -28,6 +28,7 @@ const ProductForm = () => {
     isAvailable: true,
     isFeatured: false,
     endDate: null,
+    features: ["" ,"" ,""]
   };
 
   const onSubmit = (data: any) => {
