@@ -42,7 +42,7 @@ export default function ProductGallery({
     <>
       <div className="space-y-4">
         <motion.div
-          className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 shadow-2xl group"
+          className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br dark:from-neutral-800 to-neutral-900 shadow-2xl group"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -67,7 +67,7 @@ export default function ProductGallery({
               src={images[selectedImage]}
               alt={`${name} - صورة ${selectedImage + 1}`}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-102"
+              className="object-cover transition-transform duration-500 group-hover:scale-101"
               priority={selectedImage === 0}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
@@ -111,8 +111,8 @@ export default function ProductGallery({
                 key={index}
                 onClick={() => setSelectedImage(index)}
                 className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 ${
-                  selectedImage === index &&
-                  "border-primary shadow-lg shadow-blue-500/30 scale-101"
+                  selectedImage === index ?
+                  "border-primary scale-101" : "border-primary/20"
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

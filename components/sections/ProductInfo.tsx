@@ -59,14 +59,17 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Badge variant="outline" className="text-sm font-medium">
+            <Badge
+              variant="outline"
+              className="text-sm font-medium text-white bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-500 border-none shadow-md shadow-amber-500/30 px-3 py-1 rounded-full"
+            >
               {product.brand}
             </Badge>
           </motion.div>
         )}
 
         <motion.h1
-          className="text-4xl font-bold text-gray-900 dark:text-white leading-tight"
+          className="text-4xl font-bold text-white leading-tight"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -81,7 +84,7 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
           transition={{ delay: 0.5 }}
         >
           {product.isAvailable ? (
-            <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+            <div className="flex items-center gap-2 text-green-400">
               <CheckCircle2 className="w-5 h-5" />
               <span className="font-semibold">متوفر</span>
             </div>
@@ -92,7 +95,7 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
             </div>
           )}
           {product.isFeatured && (
-            <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
+            <Badge className="bg-gradient-to-r py-1 from-yellow-400 to-orange-400 text-white border-0">
               <Sparkles className="w-3 h-3 ml-1" />
               منتج مميز
             </Badge>
@@ -100,27 +103,24 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
         </motion.div>
       </div>
 
-      <Separator />
+      <Separator className="bg-muted-foreground" />
 
       <div className="space-y-5">
-        <div className="font-cairo text-base">السعر</div>
+        <div className="font-cairo text-base text-neutral-200">السعر</div>
         <motion.div
-          className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-2xl p-6 space-y-5"
+          className="bg-gradient-to-br from-blue-950/30 to-indigo-950/30 rounded-2xl p-6 space-y-5"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6 }}
         >
           <div className="flex items-baseline gap-3 flex-wrap">
-            <span className="text-5xl font-bold text-gray-900 dark:text-white">
+            <span className="text-5xl font-bold text-white">
               {finalPrice.toFixed(2)}
             </span>
-            <span className="text-2xl text-gray-600 dark:text-gray-400">
-              {" "}
-              ج.م{" "}
-            </span>
+            <span className="text-2xl text-gray-400"> ج.م </span>
             {product.hasDiscount && (
               <>
-                <span className="text-2xl text-gray-500 dark:text-gray-500 line-through">
+                <span className="text-2xl text-gray-500 line-through">
                   {product.price.toFixed(2)}
                 </span>
                 <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white border-0 text-base px-3 py-1">
@@ -131,7 +131,7 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
           </div>
 
           {product.discount > 0 && product.endDate && (
-            <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+            <div className="flex items-center gap-2 text-pink-400">
               <Clock className="w-4 h-4" />
               <span className="text-sm font-medium">
                 ينتهي العرض في:{" "}
@@ -155,11 +155,14 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
         >
-          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <label className="text-sm font-semibold text-neutral-200">
             السعة
           </label>
           <div className="flex items-center mt-1.5 gap-2">
-            <Badge variant="outline" className="text-base px-4 py-1.5">
+            <Badge
+              variant="outline"
+              className="text-base text-white px-4 py-1.5"
+            >
               <Package className="w-4 h-4 ml-2" />
               {product.capacity}
             </Badge>
@@ -176,14 +179,14 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
         <Button
           variant="outline"
           onClick={handleShare}
-          className="h-12 rounded-xl w-full"
+          className="h-12 rounded-xl w-full bg-[#40404030] border-neutral-700 text-white transition duration-300 hover:bg-[#40404050] hover:text-[#fde68a]"
         >
           <Share2 className="w-5 h-5 ml-2" />
           مشاركة
         </Button>
       </motion.div>
 
-      <Separator />
+      <Separator className="bg-muted-foreground" />
 
       <motion.div
         className="space-y-3"
@@ -191,10 +194,8 @@ export default function ProductInfo({ product, productId }: ProductInfoProps) {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.0 }}
       >
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          الوصف
-        </h2>
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line text-lg">
+        <h2 className="text-2xl font-bold text-white">الوصف</h2>
+        <p className="text-gray-300 leading-relaxed whitespace-pre-line text-lg">
           {product.description}
         </p>
       </motion.div>

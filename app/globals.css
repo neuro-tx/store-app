@@ -235,3 +235,21 @@ html.lenis {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a0a0a0;
+  border-radius: 10px;
+  border: 3px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c9c9c9;
+}
