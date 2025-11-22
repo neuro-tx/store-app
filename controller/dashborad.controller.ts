@@ -134,6 +134,7 @@ export const getProductTable = async (req: Request) => {
     hasDiscount: 1,
     category: 1,
     createdAt: 1,
+    updatedAt: 1
   };
   const sortOptions: any = search
     ? { score: { $meta: "textScore" } }

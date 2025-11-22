@@ -8,14 +8,11 @@ import {
 } from "@/components/TableData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CategoryProps } from "@/lib/types";
 import { Check, Copy, Package } from "lucide-react";
 import { useState } from "react";
 
-interface Category {
-  _id: string;
-  name: string;
-  slug: string;
-  image?: string;
+interface Category extends CategoryProps {
   productCount?: number;
   createdAt: string;
   updatedAt: string;
@@ -48,9 +45,7 @@ export default function CategoryTable() {
       render: (category) => (
         <div className="flex flex-col">
           <span className="font-medium text-base">{category.name}</span>
-          <span className="text-xs text-muted-foreground">
-            {category._id}
-          </span>
+          <span className="text-xs text-muted-foreground">{category._id}</span>
         </div>
       ),
     },

@@ -21,7 +21,7 @@ interface ProductInfoProps {
   productId: string;
 }
 
-export default function ProductInfo({ product, productId }: ProductInfoProps) {
+export default function ProductInfo({ product }: ProductInfoProps) {
   const finalPrice = product.hasDiscount
     ? product.price - product.discount
     : product.price;

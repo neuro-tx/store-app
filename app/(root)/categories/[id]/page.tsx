@@ -1,4 +1,4 @@
-import { ProductCardProps } from "@/components/ProductCard";
+import { ProductCardProps } from "@/lib/types";
 import ProductsGrid from "@/components/ProductsGrid";
 import { Metadata } from "next";
 

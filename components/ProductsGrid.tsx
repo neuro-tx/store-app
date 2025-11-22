@@ -2,9 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ProductCardProps, GridCard ,RowCard } from "./ProductCard";
+import { GridCard ,RowCard } from "./ProductCard";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ProductCardProps } from "@/lib/types";
 
 interface ProductGridProps {
   cols?: string;

@@ -3,12 +3,6 @@ import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
-  const links = [
-    { title: "الرئيسية", href: "/" },
-    { title: "المنتجات", href: "/products" },
-    { title: "الفئات", href: "/categories" },
-    { title: "المميزة", href: "/features" },
-  ];
 
   return (
     <footer className="py-16 md:py-20 border-t bg-neutral-900 border-neutral-700 text-white">
@@ -22,19 +16,6 @@ const Footer = () => {
             height={50}
             priority
           />
-        </div>
-
-        {/* Navigation Links */}
-        <div className="flex flex-wrap justify-center gap-6 text-sm">
-          {links.map((link, index) => (
-            <Link
-              key={index}
-              href={link.href}
-              className="text-muted-foreground hover:text-primary transition-colors duration-150 hover:underline font-medium font-cairo"
-            >
-              {link.title}
-            </Link>
-          ))}
         </div>
 
         {/* Social Icons */}

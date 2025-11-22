@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { links } from "@/data/home";
+import { links } from "@/lib/gen-data";
 import Image from "next/image";
 import { useClickout } from "@/hooks/use-clickout";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ProductsGrid from "@/components/ProductsGrid";
-import { ProductCardProps } from "../ProductCard";
+import { ProductCardProps } from "@/lib/types";
 import { Loader, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import {

@@ -1,6 +1,6 @@
 "use client";
 
-import { collectiones } from "@/data/show-data";
+import { collectiones } from "@/lib/gen-data";
 import React from "react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";

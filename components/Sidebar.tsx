@@ -1,6 +1,6 @@
 "use client";
 
-import { ADMIN_LINKS } from "@/data/admin";
+import { ADMIN_LINKS } from "@/lib/gen-data";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";

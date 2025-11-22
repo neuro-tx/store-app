@@ -4,14 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-
-interface CategoryProps {
-  _id: string;
-  name: string;
-  description: string;
-  slug: string;
-  image: string;
-}
+import { CategoryProps } from "@/lib/types";
 
 interface CategoriesGridProps {
   categories: CategoryProps[];

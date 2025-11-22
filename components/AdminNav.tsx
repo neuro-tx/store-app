@@ -3,7 +3,7 @@
 import React from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { Button } from "./ui/button";
-import { TextAlignJustify, X } from "lucide-react";
+import { TextAlignJustify } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 
 const Navbar = () => {

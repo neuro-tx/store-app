@@ -4,21 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-
-export interface ProductCardProps {
-  _id: string;
-  name: string;
-  description?: string;
-  price: number;
-  images: string[];
-  isAvailable?: boolean;
-  isFeatured?: boolean;
-  brand?: string;
-  discount?: number;
-  capacity?: string;
-  hasDiscount?: boolean;
-  endDate?: Date;
-}
+import { ProductCardProps } from "@/lib/types";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },

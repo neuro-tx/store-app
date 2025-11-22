@@ -23,6 +23,7 @@ interface Product {
   hasDiscount: boolean;
   category: { _id: string; name: string };
   createdAt: string;
+  updatedAt: string;
 }
 
 export default function ProductTable() {
@@ -44,9 +45,7 @@ export default function ProductTable() {
       render: (product) => (
         <div className="max-w-40 truncate line-clamp-1 flex flex-col">
           <span className="font-medium">{product.name}</span>
-          <span className="text-xs text-muted-foreground">
-            {product._id}
-          </span>
+          <span className="text-xs text-muted-foreground">{product._id}</span>
         </div>
       ),
     },
@@ -92,6 +91,23 @@ export default function ProductTable() {
       key: "createdAt",
       header: "تاريخ الإضافة",
       render: (product) => <DateCell date={product.createdAt} />,
+    },
+    {
+      key: "updatedAt",
+      header: "آخر تحديث",
+      render: (product) => {
+        if (!product.updatedAt) return <span>—</span>;
+
+        const date = new Date(product.updatedAt);
+        const formatted = new Intl.DateTimeFormat("ar-EG", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(date);
+
+        return <span className="text-primary font-medium">{formatted}</span>;
+      },
     },
   ];
 
