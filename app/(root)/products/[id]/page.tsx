@@ -4,6 +4,8 @@ import { IProduct } from "@/model/product.model";
 import ProductGallery from "@/components/sections/ProductGallery";
 import ProductInfo from "@/components/sections/ProductInfo";
 import { SearchX } from "lucide-react";
+import { ProductCardProps } from "@/lib/types";
+import ProductsGrid from "@/components/ProductsGrid";
 
 interface ParamsProps {
   params: {
@@ -33,7 +35,10 @@ async function getProduct(id: string) {
     }
 
     const data = await res.json();
-    return data.data as IProduct;
+    return {
+      product: data?.data?.product as IProduct,
+      recommend: data?.data?.recommend as ProductCardProps[],
+    };
   } catch (error) {
     console.error("Error fetching product:", error);
     return null;
@@ -44,7 +49,8 @@ export async function generateMetadata({
   params,
 }: ParamsProps): Promise<Metadata> {
   const { id } = await params;
-  const product = await getProduct(id);
+  const res = await getProduct(id);
+  const product = res?.product;
 
   if (!product) {
     return {
@@ -57,8 +63,8 @@ export async function generateMetadata({
     ? product.price - product.discount
     : product.price;
 
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "دار الواحة";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteName = "دار الواحة";
+  const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   return {
     title: `${product.name} | ${siteName}`,
@@ -126,7 +132,10 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ParamsProps) {
   const { id } = await params;
-  const product = await getProduct(id);
+  const res = await getProduct(id);
+
+  const product = res?.product;
+  const recs = res?.recommend || [];
 
   if (!product) {
     return ProductNotFound();
@@ -148,6 +157,19 @@ export default async function ProductPage({ params }: ParamsProps) {
               <ProductInfo product={product} productId={id} />
             </div>
           </div>
+          {recs?.length !== 0 && (
+            <div className="mt-10 space-y-10 border-t border-neutral-700 pt-10">
+              <div className="text-right">
+                <p className="text-5xl font-semibold text-neutral-200 mb-4">
+                  منتجات مشابهة
+                </p>
+                <p className="text-primary text-base">
+                  قد تعجبك هذه المنتجات ضمن نفس الفئة
+                </p>
+              </div>
+              <ProductsGrid products={recs} applyRow />
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -62,9 +62,9 @@ export default async function CatePage({ params, searchParams }: ParamsProps) {
 
   if (!data) {
     return (
-      <div className="w-full pt-32 pb-16 text-center px-3 md:px-6 lg:px-8">
+      <div className="w-full pt-32 bg-neutral-900 pb-16 text-center px-3 md:px-6 lg:px-8">
         <div className="container py-40 rounded-xl border mx-auto bg-primary/15 border-primary">
-          <h1 className="text-3xl font-bold mb-4">الفئة غير موجودة</h1>
+          <h1 className="text-3xl text-white font-bold mb-4">الفئة غير موجودة</h1>
           <p className="text-muted-foreground">
             لم نتمكن من العثور على الفئة التي تبحث عنها.
           </p>
@@ -75,9 +75,9 @@ export default async function CatePage({ params, searchParams }: ParamsProps) {
 
   if (products.length === 0) {
     return (
-      <div className="w-full pt-32 pb-16 text-center px-3 md:px-6 lg:px-8">
-        <div className="container py-40 rounded-xl border mx-auto">
-          <h1 className="text-3xl font-bold mb-4">
+      <div className="w-full pt-32 bg-neutral-900 pb-16 text-center px-3 md:px-6 lg:px-8">
+        <div className="container py-40 rounded-xl border border-neutral-700 mx-auto">
+          <h1 className="text-3xl font-bold mb-4 text-white">
             لا توجد منتجات في هذه الفئة
           </h1>
           <p className="text-muted-foreground my-2">
@@ -92,7 +92,7 @@ export default async function CatePage({ params, searchParams }: ParamsProps) {
   }
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full overflow-x-hidden bg-neutral-950 text-white">
       <div className="container mx-auto py-32 px-3 md:px-6 lg:px-8">
         <div className="mb-12 text-center">
           <h1 className="text-balance font-cooper text-transparent bg-clip-text bg-radial from-primary via-orange-600 to-orange-200 text-[clamp(2rem,5vw,3.5rem)]">

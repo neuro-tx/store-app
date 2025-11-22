@@ -82,9 +82,9 @@ export const Header = () => {
       >
         <div
           className={cn(
-            "mx-auto container px-4 rounded-md transition-all duration-500 md:px-6",
+            "mx-auto container px-4 border border-transparent rounded-xl transition-all duration-500 md:px-6",
             isScrolled &&
-              "rounded-2xl border border-neutral-600 dark:border-neutral-600 max-w-5xl md:px-4 backdrop-blur-sm"
+              "rounded-2xl border-neutral-600 max-w-5xl md:px-4 backdrop-blur-sm"
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between flex-row-reverse gap-6 py-3 md:gap-0 md:py-3">

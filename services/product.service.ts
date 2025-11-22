@@ -50,13 +50,19 @@ const createProduct = async (data: any) => {
 };
 
 const getProductById = async (id: string) => {
-  const getProduct = await Product.findById(id)
-    .populate("category", "name slug _id")
-    .lean();
+  const getProduct = await Product.findById(id).lean();
 
   if (!getProduct) return fail(404, "المنتج غير موجود");
 
-  return success(getProduct, 200);
+  const catId = getProduct.category._id;
+  const recProds = await Product.find({
+    category: catId,
+    _id: { $ne: getProduct._id },
+  })
+    .limit(4)
+    .lean();
+
+  return success({ product: getProduct, recommend: recProds }, 200);
 };
 
 const updateProduct = async (id: string, data: any) => {
