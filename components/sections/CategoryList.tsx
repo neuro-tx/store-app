@@ -77,7 +77,7 @@ const CategoryList = ({ categories }: { categories: CategoryProps[] }) => {
             placeholder="ابحث عن فئة..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full font-cairo pr-12 pl-4 py-6 text-base rounded-xl bg-neutral-800 border-gray-700 text-white placeholder:text-gray-400 focus:ring-0 focus-visible:border-ring focus-visible:ring-ring/10"
+            className="w-full font-cairo pr-12 pl-4 h-12 text-base rounded-xl bg-neutral-900 border-gray-800 text-white placeholder:text-gray-400 focus:ring-0 focus-visible:border-ring focus-visible:ring-ring/10 transition"
           />
         </div>
       </motion.div>
@@ -94,7 +94,7 @@ const CategoryList = ({ categories }: { categories: CategoryProps[] }) => {
             whileHover={{ y: -5, scale: 1 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <Card className="pt-0 pb-3 rounded-xl overflow-hidden bg-neutral-900 border border-neutral-700">
+            <Card className="pt-0 pb-3 rounded-xl overflow-hidden bg-neutral-900 border border-neutral-700 gap-5">
               <div className="relative h-48 overflow-hidden">
                 <img
                   src={cate.image}

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import ProductsGrid from "@/components/ProductsGrid";
 import { ProductCardProps } from "../ProductCard";
-import { Loader } from "lucide-react";
+import { Loader, Search } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface CategoryProps {
@@ -227,13 +227,19 @@ const ShowProducts = () => {
 
   return (
     <div className="space-y-10">
-      <div className="px-3 py-4 flex md:items-center justify-between gap-6 flex-col lg:flex-row">
-        <Input
-          placeholder="ابحث عن منتج…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full lg:max-w-xl xl:max-w-2xl"
-        />
+      <div className="px-3 py-4 flex md:items-center justify-between gap-5 flex-col lg:flex-row">
+        <div className="w-full relative lg:max-w-xl xl:max-w-2xl">
+          <Search
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+            size={18}
+          />
+          <Input
+            placeholder="ابحث عن منتج…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pr-10 pl-4 h-11 lg:h-9"
+          />
+        </div>
         <div className="grid grid-cols-3 gap-3 w-full">
           <Select
             onValueChange={(value) => {
@@ -313,7 +319,7 @@ const ShowProducts = () => {
           <p className={`text-sm mt-2 ${emptyDescClass}`}>{emptyDesc}</p>
         </div>
       ) : (
-        <ProductsGrid products={products} />
+        <ProductsGrid products={products} applyRow />
       )}
 
       {products.length > 0 && (

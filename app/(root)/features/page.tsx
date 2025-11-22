@@ -56,7 +56,7 @@ export default async function FeaturesPage() {
           </div>
         )}
 
-        <ProductsGrid products={products} />
+        <ProductsGrid products={products} applyRow />
       </div>
     </div>
   );

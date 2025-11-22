@@ -2,12 +2,14 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import ProductCard, { ProductCardProps } from "./ProductCard";
+import { ProductCardProps, GridCard ,RowCard } from "./ProductCard";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductGridProps {
   cols?: string;
   products: ProductCardProps[];
+  applyRow?: boolean;
 }
 
 const containerVariants = {
@@ -19,11 +21,28 @@ const containerVariants = {
   },
 };
 
-const ProductsGrid: React.FC<ProductGridProps> = ({ products, cols }) => {
-  return (
+const ProductsGrid: React.FC<ProductGridProps> = ({
+  products,
+  cols,
+  applyRow = false,
+}) => {
+  const isMobile = useIsMobile();
+
+  return isMobile && applyRow ? (
+    <motion.div 
+      className="space-y-3"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
+    >
+      {products.map((product) => (
+        <RowCard key={product._id} product={product} />
+      ))}
+    </motion.div>
+  ) : (
     <motion.div
       className={cn(
-        "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3",
+        "grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3",
         cols
       )}
       initial="hidden"
@@ -31,7 +50,7 @@ const ProductsGrid: React.FC<ProductGridProps> = ({ products, cols }) => {
       variants={containerVariants}
     >
       {products.map((product) => (
-        <ProductCard key={product._id} product={product} />
+        <GridCard key={product._id} product={product} />
       ))}
     </motion.div>
   );
