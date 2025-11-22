@@ -13,6 +13,13 @@ import ProductsGrid from "@/components/ProductsGrid";
 import { ProductCardProps } from "../ProductCard";
 import { Loader, Search } from "lucide-react";
 import { Button } from "../ui/button";
+import {
+  buildFetchUrl,
+  getDynamicPages,
+  priceRange,
+  ProductFilterOption,
+  sortOptions,
+} from "@/lib/prod-helper";
 
 interface CategoryProps {
   _id: string;
@@ -21,14 +28,6 @@ interface CategoryProps {
   description: string;
   image: string;
 }
-
-type ProductFilterOption =
-  | "latest"
-  | "discount"
-  | "features"
-  | "priceAsc"
-  | "priceDesc"
-  | "oldest";
 
 const ShowProducts = () => {
   const [products, setProducts] = useState<ProductCardProps[]>([]);
@@ -66,27 +65,40 @@ const ShowProducts = () => {
     [search, category, discount, features, minPrice, maxPrice]
   );
 
-  const buildFetchUrl = () => {
-    const params = new URLSearchParams();
-    if (search) params.append("search", search);
-    if (category) params.append("category", category);
-    if (discount) params.append("discount", "true");
-    if (features) params.append("features", "true");
-    params.append("minPrice", minPrice.toString());
-    params.append("maxPrice", maxPrice.toString());
-    params.append("sort", sortField);
-    params.append("order", sortOrder);
-    params.append("page", page.toString());
-    params.append("limit", limit.toString());
-    return `/api/product/match?${params.toString()}`;
-  };
+  const fetchUrl = useMemo(
+    () =>
+      buildFetchUrl({
+        search,
+        category,
+        discount,
+        features,
+        minPrice,
+        maxPrice,
+        sortField,
+        sortOrder,
+        page,
+        limit,
+      }),
+    [
+      search,
+      category,
+      discount,
+      features,
+      minPrice,
+      maxPrice,
+      sortField,
+      sortOrder,
+      page,
+      limit,
+    ]
+  );
 
   useEffect(() => {
     async function getProducts() {
       try {
         const baseUrl =
           process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-        const res = await fetch(`${baseUrl}/${buildFetchUrl()}`, {
+        const res = await fetch(`${baseUrl}/${fetchUrl}`, {
           cache: "no-store",
         });
 
@@ -128,7 +140,6 @@ const ShowProducts = () => {
     sortField,
     sortOrder,
     page,
-    limit,
   ]);
 
   useEffect(() => {
@@ -203,6 +214,8 @@ const ShowProducts = () => {
     ? "text-fuchsia-500 font-medium"
     : "text-gray-400";
 
+  const selectIClass = "focus:text-[#fde68a] focus:bg-[#92400e]";
+
   // Render
   if (loading) {
     return (
@@ -225,6 +238,8 @@ const ShowProducts = () => {
     );
   }
 
+  const pages = getDynamicPages(pagination.totalPages, pagination.page);
+
   return (
     <div className="space-y-10">
       <div className="px-3 py-4 flex md:items-center justify-between gap-5 flex-col lg:flex-row">
@@ -237,7 +252,7 @@ const ShowProducts = () => {
             placeholder="ابحث عن منتج…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pr-10 pl-4 h-11 lg:h-9"
+            className="w-full pr-10 pl-4 h-11 lg:h-9 border-neutral-800 bg-neutral-900"
           />
         </div>
         <div className="grid grid-cols-3 gap-3 w-full">
@@ -247,16 +262,22 @@ const ShowProducts = () => {
               actions[value as ProductFilterOption]?.();
             }}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full border-neutral-800 bg-[#40404030] hover:bg-[#40404050]">
               <SelectValue placeholder="الترتيب" />
             </SelectTrigger>
-            <SelectContent align="start">
-              <SelectItem value="latest">الأحدث</SelectItem>
-              <SelectItem value="oldest">الأقدم</SelectItem>
-              <SelectItem value="discount">الخصومات</SelectItem>
-              <SelectItem value="features">المميزة</SelectItem>
-              <SelectItem value="priceAsc">السعر: الأقل أولاً</SelectItem>
-              <SelectItem value="priceDesc">السعر: الأعلى أولاً</SelectItem>
+            <SelectContent
+              align="start"
+              className="bg-[#262626] border-neutral-800 text-neutral-200"
+            >
+              {sortOptions.map((s) => (
+                <SelectItem
+                  key={s.value}
+                  value={s.value}
+                  className={selectIClass}
+                >
+                  {s.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -273,32 +294,47 @@ const ShowProducts = () => {
               }
             }}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full border-neutral-800 bg-[#40404030] hover:bg-[#40404050]">
               <SelectValue placeholder="السعر" />
             </SelectTrigger>
-            <SelectContent align="start">
-              <SelectItem value="0 - 500">الكل</SelectItem>
-              <SelectItem value="0-50">0 - 50</SelectItem>
-              <SelectItem value="50-100">50 - 100</SelectItem>
-              <SelectItem value="100-250">100 - 250</SelectItem>
-              <SelectItem value="250-400">250 - 400</SelectItem>
-              <SelectItem value="400-999999">أعلى من 400</SelectItem>
+            <SelectContent
+              align="start"
+              className="bg-[#262626] border-neutral-800 text-neutral-200"
+            >
+              {priceRange.map((pr) => (
+                <SelectItem
+                  key={pr.range}
+                  value={pr.range}
+                  className={selectIClass}
+                >
+                  {pr.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
           <Select
             onValueChange={(value) => setCategory(value === "all" ? "" : value)}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full border-neutral-800 bg-[#40404030] hover:bg-[#40404050]">
               <SelectValue placeholder="الفئة" />
             </SelectTrigger>
-            <SelectContent align="start" className="max-h-52">
-              <SelectItem value="all">كل الفئات</SelectItem>
+            <SelectContent
+              align="start"
+              className="max-h-52 bg-[#262626] border-neutral-800 text-neutral-200"
+            >
+              <SelectItem value="all" className={selectIClass}>
+                كل الفئات
+              </SelectItem>
               {loadingCat ? (
                 <p className="text-center p-1 text-sm">جارِ التحميل ...</p>
               ) : categories.length > 0 ? (
                 categories.map((cat) => (
-                  <SelectItem key={cat.slug} value={cat._id}>
+                  <SelectItem
+                    className={selectIClass}
+                    key={cat.slug}
+                    value={cat._id}
+                  >
                     {cat.name}
                   </SelectItem>
                 ))
@@ -341,33 +377,33 @@ const ShowProducts = () => {
           <div className="flex justify-center items-center gap-2 flex-wrap">
             <Button
               variant="outline"
-              disabled={pagination.page === pagination.totalPages}
-              onClick={() =>
-                setPagination({ ...pagination, page: pagination.page + 1 })
-              }
-            >
-              التالي
-            </Button>
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
-              (p) => (
-                <Button
-                  key={p}
-                  variant={pagination.page === p ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setPagination({ ...pagination, page: p })}
-                >
-                  {p}
-                </Button>
-              )
-            )}
-            <Button
-              variant="outline"
               disabled={pagination.page === 1}
-              onClick={() =>
-                setPagination({ ...pagination, page: pagination.page - 1 })
-              }
+              onClick={() => setPage(page - 1)}
+              className="bg-[#40404030] border-neutral-700"
             >
               السابق
+            </Button>
+            {pages.map((p) => (
+              <Button
+                key={p}
+                size="sm"
+                onClick={() => setPage(p)}
+                className={
+                  pagination.page === p
+                    ? ""
+                    : "border border-neutral-700 shadow-xs text-neutral-200 bg-[#40404030] dark:border-input hover:bg-[#40404050]"
+                }
+              >
+                {p}
+              </Button>
+            ))}
+            <Button
+              variant="outline"
+              disabled={pagination.page === pagination.totalPages}
+              onClick={() => setPage(page + 1)}
+              className="bg-[#40404030] border-neutral-700"
+            >
+              التالي
             </Button>
           </div>
         </div>
