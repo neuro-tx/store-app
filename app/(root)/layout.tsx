@@ -5,6 +5,7 @@ import { ThemedToaster } from "@/components/ThemedToaster";
 import { Header } from "@/components/Header";
 import LenisProvider from "@/components/providers/LenisProvider";
 import Footer from "@/components/Footer";
+import RateLimitChecker from "@/components/RateLimitChecker";
 
 export const metadata: Metadata = {
   title: "دار الواحة | منتجات غذائية طبيعية من واحة سيوة",
@@ -37,6 +38,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <RateLimitChecker />
           <Header />
           <LenisProvider>{children}</LenisProvider>
           <Footer />

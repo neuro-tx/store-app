@@ -6,6 +6,7 @@ import "../globals.css";
 import Sidebar from "@/components/Sidebar";
 import SiderbarProvider from "../../components/providers/SiderbarProvider";
 import Navbar from "@/components/AdminNav";
+import RateLimitChecker from "@/components/RateLimitChecker";
 
 export const metadata: Metadata = {
   title: "لوحة التحكم | دار الواحة",
@@ -22,6 +23,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <RateLimitChecker />
           <SiderbarProvider>
             <div className="w-full min-h-svh overflow-x-hidden relative">
               <Sidebar />
