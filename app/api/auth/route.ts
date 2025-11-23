@@ -32,8 +32,8 @@ export const POST = errorHandler(
   }
 );
 
-export const GET = errorHandler(
-  async (_req: NextRequest): Promise<NextResponse> => {
+export const GET = async (_req: NextRequest): Promise<NextResponse> => {
+  try {
     const admin = await adminCheck();
 
     return NextResponse.json(
@@ -42,5 +42,12 @@ export const GET = errorHandler(
         status: admin ? 200 : 403,
       }
     );
+  } catch {
+    return NextResponse.json(
+      { auth: false },
+      {
+        status: 403,
+      }
+    );
   }
-);
+};
