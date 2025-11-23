@@ -1,40 +1,48 @@
-import { adminCheck } from "@/lib/auth";
+import { categoryController } from "@/controller/category.controller";
 import { errorHandler } from "@/lib/errorHandler";
-import { fail, success } from "@/lib/states";
-import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 
-export const POST = errorHandler(async (req: Request) => {
-  const { userKey, password } = await req.json();
+interface ReqProps {
+  params: {
+    id: string;
+  };
+}
 
-  const check =
-    process.env.ACCESS_STROE_USERKEY === userKey &&
-    process.env.ACCESS_STROE_PASSWORD === password;
+export const GET = errorHandler(
+  async (req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
+    const { id } = params;
 
-  if (!check) {
-    return fail(400, "غير مصرح بالوصول.");
+    const url = new URL(req.url);
+    const slug = url.searchParams.get("slug") || "";
+
+    if (!slug) {
+      const data = await categoryController.getCatById(id);
+      return NextResponse.json(data);
+    } else {
+      const data = await categoryController.getProdsByCateId(id, slug);
+      return NextResponse.json(data);
+    }
   }
+);
 
-  const response = success(
-    null,
-    200,
-    "تم تسجيل الدخول بنجاح، سيتم تحويلك إلى لوحة التحكم..."
-  );
-
-  response.cookies.set("auth-role", "admin", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 7 * 60 * 60 * 24,
-  });
-
-  return response;
-});
-
-export const GET = errorHandler(async (req: Request) => {
-  const admin = await adminCheck();
-
-  if (admin) {
-    return NextResponse.json({ auth: true }, { status: 200 });
+export const PUT = errorHandler(
+  async (req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
+    const { id } = params;
+    const res = await categoryController.updateCat(id, req);
+    revalidateTag("category");
+    revalidateTag("categories");
+    return NextResponse.json(res);
   }
-  return NextResponse.json({ auth: false }, { status: 403 });
-});
+);
+
+export const DELETE = errorHandler(
+  async (_req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
+    const { id } = params;
+    const data = await categoryController.deleteCat(id);
+    revalidateTag("category");
+    revalidateTag("categories");
+    revalidateTag("products");
+    return NextResponse.json(data);
+  }
+);
