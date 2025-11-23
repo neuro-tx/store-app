@@ -4,9 +4,7 @@ import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 interface ReqProps {
-  params: {
-    id: string;
-  };
+  params: { id: string };
 }
 
 export const GET = errorHandler(
@@ -27,10 +25,8 @@ export const PUT = errorHandler(
   async (req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
     const { id } = params;
     const res = await categoryController.updateCat(id, req);
-
     revalidateTag("category");
     revalidateTag("categories");
-
     return NextResponse.json(res);
   }
 );
@@ -39,11 +35,9 @@ export const DELETE = errorHandler(
   async (_req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
     const { id } = params;
     const data = await categoryController.deleteCat(id);
-
     revalidateTag("category");
     revalidateTag("categories");
     revalidateTag("products");
-
     return NextResponse.json(data);
   }
 );
