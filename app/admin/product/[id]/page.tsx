@@ -40,18 +40,21 @@ export default async function EditProduct({ params }: ProductParam) {
   const product = data.product;
 
   const defValues: ProductType = {
-    name: product.name,
-    category: product.category,
-    description: product.description,
-    images: product.images || [],
-    brand: product.brand || "",
-    discount: product.discount || 0,
-    endDate: product.endDate || null,
-    isAvailable: product.isAvailable,
-    isFeatured: product.isFeatured,
-    price: product.price || 0,
-    capacity: product.capacity || "",
-    features: product?.features || ["", "", ""],
+    name: product.name ?? "",
+    category: product.category ?? "",
+    description: product.description ?? "",
+    images: product.images ?? [],
+    price: product.price ? Number(product.price) : 1,
+    discount: product.discount ? Number(product.discount) : 0,
+    capacity: product.capacity ?? "",
+    brand: product.brand ?? "دار الواحة",
+    isAvailable: product.isAvailable ?? true,
+    isFeatured: product.isFeatured ?? false,
+    endDate: product.endDate ? new Date(product.endDate) : null,
+    features:
+      Array.isArray(product.features) && product.features.length >= 3
+        ? product.features
+        : ["ميزة 1", "ميزة 2", "ميزة 3"],
   };
 
   return (

@@ -52,7 +52,7 @@ const ProductForm = () => {
 
   const methods = useForm();
   const form = useForm<ProductType>({
-    resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema as any),
     defaultValues: defaultVal,
   });
 

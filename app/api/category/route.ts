@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = errorHandler(
   async (req: NextRequest): Promise<NextResponse> => {
     const data = await categoryController.getCats(req);
-    return NextResponse.json(data);
+    return data
   }
 );
 
@@ -17,6 +17,6 @@ export const POST = errorHandler(
     revalidateTag("categories");
     revalidateTag("category");
 
-    return NextResponse.json(res);
+    return res
   }
 );

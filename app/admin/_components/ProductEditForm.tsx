@@ -43,7 +43,7 @@ const ProductEditForm = ({
   const [submitting, startSubmit] = useTransition();
 
   const form = useForm<ProductType>({
-    resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema as any),
     defaultValues: initialValue,
   });
 

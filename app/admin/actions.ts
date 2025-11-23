@@ -1,9 +1,8 @@
 import dbConnect from "@/lib/db";
-import { errorHandler } from "@/lib/errorHandler";
 import { Product } from "@/model/product.model";
 
-export const syncProducts = errorHandler(async () => {
-  dbConnect();
+dbConnect();
+export async function syncProducts() {
   const now = new Date();
 
   const result = await Product.updateMany(
@@ -23,4 +22,4 @@ export const syncProducts = errorHandler(async () => {
     success: true,
     state: `${result.modifiedCount} Document are updated...`,
   };
-});
+}
