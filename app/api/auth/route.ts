@@ -1,48 +1,46 @@
-import { categoryController } from "@/controller/category.controller";
+import { adminCheck } from "@/lib/auth";
 import { errorHandler } from "@/lib/errorHandler";
-import { revalidateTag } from "next/cache";
+import { fail, success } from "@/lib/states";
 import { NextRequest, NextResponse } from "next/server";
 
-interface ReqProps {
-  params: {
-    id: string;
-  };
-}
+export const POST = errorHandler(
+  async (req: NextRequest): Promise<NextResponse> => {
+    const { userKey, password } = await req.json();
+
+    const check =
+      process.env.ACCESS_STROE_USERKEY === userKey &&
+      process.env.ACCESS_STROE_PASSWORD === password;
+
+    if (!check) {
+      return fail(400, "غير مصرح بالوصول.");
+    }
+
+    const response = success(
+      null,
+      200,
+      "تم تسجيل الدخول بنجاح، سيتم تحويلك إلى لوحة التحكم..."
+    );
+
+    response.cookies.set("auth-role", "admin", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60,
+    });
+
+    return response;
+  }
+);
 
 export const GET = errorHandler(
-  async (req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
-    const { id } = params;
+  async (_req: NextRequest): Promise<NextResponse> => {
+    const admin = await adminCheck();
 
-    const url = new URL(req.url);
-    const slug = url.searchParams.get("slug") || "";
-
-    if (!slug) {
-      const data = await categoryController.getCatById(id);
-      return NextResponse.json(data);
-    } else {
-      const data = await categoryController.getProdsByCateId(id, slug);
-      return NextResponse.json(data);
-    }
-  }
-);
-
-export const PUT = errorHandler(
-  async (req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
-    const { id } = params;
-    const res = await categoryController.updateCat(id, req);
-    revalidateTag("category");
-    revalidateTag("categories");
-    return NextResponse.json(res);
-  }
-);
-
-export const DELETE = errorHandler(
-  async (_req: NextRequest, { params }: ReqProps): Promise<NextResponse> => {
-    const { id } = params;
-    const data = await categoryController.deleteCat(id);
-    revalidateTag("category");
-    revalidateTag("categories");
-    revalidateTag("products");
-    return NextResponse.json(data);
+    return NextResponse.json(
+      { auth: admin },
+      {
+        status: admin ? 200 : 403,
+      }
+    );
   }
 );
