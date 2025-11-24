@@ -4,10 +4,11 @@ import { AdminChart } from "@/components/AdminChart";
 import ProductTable from "./_components/ProductTable";
 import CategoryTable from "./_components/CategoryTable";
 import ExpiringTable from "./_components/ExpiringTable";
-import { syncProducts } from "./actions";
+export const dynamic = "force-dynamic";
 
 const page = async () => {
-  await syncProducts();
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  fetch(`${BASE_URL}/api/product/sync`, { cache: "no-store" }).catch(() => {});
 
   return (
     <div className="w-full min-h-svh">

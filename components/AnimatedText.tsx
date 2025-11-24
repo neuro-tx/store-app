@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView, MotionProps } from "framer-motion";
 
 interface AnimatedTextProps extends MotionProps {
-  children: React.ReactElement;
+  children: React.ReactElement<{ children: string }>;
   stagger?: number;
   custom?: {
     from: Record<string, any>;
@@ -59,7 +59,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
     [textParts, custom, motionProps, stagger]
   );
 
-  const clonedElement = React.cloneElement(children, {
+  const clonedElement = React.cloneElement(children as any, {
     ref: containerRef,
     "aria-label": textContent,
     role: "text",

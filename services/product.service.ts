@@ -166,6 +166,26 @@ const getProductsWithFilter = async (req: Request) => {
   }
 };
 
+const syncDiscountProducts = async () => {
+  const now = new Date();
+  const result = await Product.updateMany(
+    { hasDiscount: true, endDate: { $lt: now } },
+    {
+      $set: {
+        hasDiscount: false,
+        discount: 0,
+      },
+      $unset: {
+        endDate: "",
+      },
+    }
+  );
+  return {
+    success: true,
+    state: `${result.modifiedCount} document(s) updated`,
+  };
+};
+
 export const productServices = {
   getAllProducts,
   getProductById,
@@ -173,4 +193,5 @@ export const productServices = {
   createProduct,
   deleteProduct,
   getProductsWithFilter,
+  syncDiscountProducts,
 };
