@@ -8,14 +8,14 @@ export const metadata = {
   keywords: ["منتجات مميزة", "دار الواحة", "أفضل المنتجات", "طبيعي"],
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 async function getFeaturedProducts() {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   try {
     const res = await fetch(
       `${BASE_URL}/api/product?features=true&discount=true&limit=20`,
       {
-        next: { revalidate: 500 },
+        next: { revalidate: 60 },
       }
     );
 
@@ -31,9 +31,10 @@ async function getFeaturedProducts() {
 
 export default async function FeaturesPage() {
   const products = await getFeaturedProducts();
+  console.log(products)
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white pt-[25vw] md:pt-[12vw]">
+    <div className="bg-neutral-950 text-white pt-[25vw] md:pt-[12vw]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="mb-12">
           <h1 className="text-3xl md:text-4xl font-bold mb-2 ">

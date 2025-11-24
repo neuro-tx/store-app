@@ -30,7 +30,6 @@ const getAllProducts = async (req: NextRequest) => {
   }
 
   const products = await Product.find(matcher)
-    .populate("category", "name slug _id")
     .sort({ createdAt: -1 })
     .limit(limit)
     .skip(skip)
