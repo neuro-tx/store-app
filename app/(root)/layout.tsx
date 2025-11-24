@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import LenisProvider from "@/components/providers/LenisProvider";
 import Footer from "@/components/Footer";
 import RateLimitChecker from "@/components/RateLimitChecker";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "دار الواحة | منتجات غذائية طبيعية من واحة سيوة",
@@ -43,6 +44,7 @@ export default function RootLayout({
           <LenisProvider>{children}</LenisProvider>
           <Footer />
           <ThemedToaster />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
