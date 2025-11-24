@@ -8,30 +8,28 @@ export const metadata = {
   keywords: ["منتجات مميزة", "دار الواحة", "أفضل المنتجات", "طبيعي"],
 };
 
-
-async function getFeaturedProducts() {
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  try {
-    const res = await fetch(
-      `${BASE_URL}/api/product?features=true&discount=true&limit=20`,
-      {
-        next: { revalidate: 60 },
-      }
-    );
-
-    if (!res.ok) return [];
-
-    const data = await res.json();
-    return data.data || [];
-  } catch (err) {
-    console.error("Fetch featured products error:", err);
-    return [];
-  }
-}
-
 export default async function FeaturesPage() {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  async function getFeaturedProducts() {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/api/product?features=true&discount=true&limit=20`,
+        {
+          next: { revalidate: 10 },
+        }
+      );
+
+      if (!res.ok) return [];
+
+      const data = await res.json();
+      return data.data || [];
+    } catch (err) {
+      console.error("Fetch featured products error:", err);
+      return [];
+    }
+  }
+
   const products = await getFeaturedProducts();
-  console.log(products)
 
   return (
     <div className="bg-neutral-950 text-white pt-[25vw] md:pt-[12vw]">

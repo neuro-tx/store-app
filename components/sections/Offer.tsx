@@ -15,8 +15,8 @@ const Offer = async () => {
 
   try {
     const [featuredRes, latestRes] = await Promise.all([
-      fetch(featuredUrl, { next: { revalidate: 120 }, cache: "no-store" }),
-      fetch(latestUrl, { next: { revalidate: 120 }, cache: "no-store" }),
+      fetch(featuredUrl, { next: { revalidate: 60 } }),
+      fetch(latestUrl, { next: { revalidate: 60 } }),
     ]);
 
     if (!featuredRes.ok || !latestRes.ok) {
