@@ -2,8 +2,9 @@ import { categorySchema } from "@/lib/category-schema";
 import { fail } from "@/lib/states";
 import { categoryService } from "@/services/category.service";
 import { isValidObjectId } from "mongoose";
+import { NextRequest } from "next/server";
 
-const getCats = async (request: Request) => {
+const getCats = async (request: NextRequest) => {
   return await categoryService.getCategories();
 };
 
@@ -12,7 +13,7 @@ const getCatById = async (id: string) => {
   return await categoryService.getCategoryById(id)
 }
 
-const createCat = async (request: Request) => {
+const createCat = async (request: NextRequest) => {
   const data = await request.json();
 
   const validate = categorySchema.safeParse(data);
@@ -32,7 +33,7 @@ const getProdsByCateId = async (id: string, slug: string) => {
   return await categoryService.getProductsById(id, slug);
 };
 
-const updateCat = async (id: string, request: Request) => {
+const updateCat = async (id: string, request: NextRequest) => {
   const data = await request.json();
   if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
 

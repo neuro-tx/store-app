@@ -5,10 +5,11 @@ import { fail, success } from "@/lib/states";
 import { Product } from "@/model/product.model";
 import { extractKey } from "@/lib/utils";
 import { deleteFromS3 } from "@/lib/fileOperations";
+import { NextRequest } from "next/server";
 
 await dbConnect();
 
-const getAllProducts = async (req: Request) => {
+const getAllProducts = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
   const discount = searchParams.get("discount") || "false";
   const features = searchParams.get("features")?.trim() || "false";
@@ -114,7 +115,7 @@ const deleteProduct = async (id: string) => {
   }
 };
 
-const getProductsWithFilter = async (req: Request) => {
+const getProductsWithFilter = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
   const discount = searchParams.get("discount") || "false";
   const features = searchParams.get("features")?.trim() || "false";

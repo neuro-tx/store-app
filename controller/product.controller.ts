@@ -2,19 +2,20 @@ import { productSchema } from "@/lib/product-schema";
 import { fail } from "@/lib/states";
 import { productServices } from "@/services/product.service";
 import { isValidObjectId } from "mongoose";
+import { NextRequest } from "next/server";
 
-const getProducts = async (request: Request) => {
+const getProducts = async (request: NextRequest) => {
   return await productServices.getAllProducts(request);
 };
 
-const getProductById = async (id: string ,req:Request) => {
+const getProductById = async (id: string ,req:NextRequest) => {
   if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
   const {searchParams} = new URL(req.url);
   const getRecommends = searchParams.get("recommends")?.trim() || false;
   return await productServices.getProductById(id ,getRecommends as boolean);
 };
 
-const createProduct = async (request: Request) => {
+const createProduct = async (request: NextRequest) => {
   const data = await request.json();
   const validate = productSchema.safeParse(data);
   if (!validate.success) {
@@ -25,7 +26,7 @@ const createProduct = async (request: Request) => {
   return await productServices.createProduct(prodData);
 };
 
-const updateProduct = async (id: string, request: Request) => {
+const updateProduct = async (id: string, request: NextRequest) => {
   if (!isValidObjectId(id)) throw new Error("Invalid category ID format");
   const data = await request.json();
 
@@ -42,7 +43,7 @@ const deleteProduct = async (id: string) => {
   return await productServices.deleteProduct(id);
 };
 
-const getProdsWithFilter = async(req:Request) => {
+const getProdsWithFilter = async(req:NextRequest) => {
   return await productServices.getProductsWithFilter(req);
 }
 
