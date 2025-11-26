@@ -5,6 +5,7 @@ import { productServices } from "@/services/product.service";
 export const POST = verifySignatureAppRouter(async () => {
   try {
     const result = await productServices.syncDiscountProducts();
+    console.log(result.state)
     return NextResponse.json({
       ...result,
     });
