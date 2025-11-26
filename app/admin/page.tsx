@@ -7,9 +7,6 @@ import ExpiringTable from "./_components/ExpiringTable";
 export const dynamic = "force-dynamic";
 
 const page = async () => {
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  fetch(`${BASE_URL}/api/product/sync`, { cache: "no-store" }).catch(() => {});
-
   return (
     <div className="w-full min-h-svh">
       <div className="container mx-auto">

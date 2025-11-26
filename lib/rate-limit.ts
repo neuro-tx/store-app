@@ -9,11 +9,11 @@ const baseLimit = new Ratelimit({
 const roleLimit = {
   admin: new Ratelimit({
     redis,
-    limiter: Ratelimit.fixedWindow(200, "60 s"),
+    limiter: Ratelimit.fixedWindow(250, "60 s"),
   }),
   user: new Ratelimit({
     redis,
-    limiter: Ratelimit.fixedWindow(100, "60 s"),
+    limiter: Ratelimit.fixedWindow(110, "60 s"),
   }),
 };
 

@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   XCircle,
   Sparkles,
+  Copy,
 } from "lucide-react";
 import { IProduct } from "@/model/product.model";
 import { Badge } from "@/components/ui/badge";
@@ -40,9 +41,13 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         console.log("Error sharing:", err);
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success("تم نسخ الرابط");
+      handleCopy();
     }
+  };
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    toast.success("تم نسخ الرابط");
   };
 
   return (
@@ -156,22 +161,40 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           transition={{ delay: 0.7 }}
         >
           <label className="text-sm font-semibold text-neutral-200">
-            السعة
+            {product.capacity.includes("|") ? "السعات المتاحة" : "السعة"}
           </label>
-          <div className="flex items-center mt-1.5 gap-2">
-            <Badge
-              variant="outline"
-              className="text-base text-white px-4 py-1.5"
-            >
-              <Package className="w-4 h-4 ml-2" />
-              {product.capacity}
-            </Badge>
+
+          <div className="flex flex-wrap items-center mt-3 gap-2">
+            {product.capacity.includes("|") ? (
+              product.capacity
+                .split("|")
+                .map((cap) => cap.trim())
+                .filter(Boolean)
+                .map((cap, i) => (
+                  <Badge
+                    key={i}
+                    variant="outline"
+                    className="text-base text-white px-4 py-1"
+                  >
+                    <Package className="h-5 w-5 ml-2" />
+                    {cap}
+                  </Badge>
+                ))
+            ) : (
+              <Badge
+                variant="outline"
+                className="text-base text-white px-4 py-1"
+              >
+                <Package className="h-5 w-5 ml-2" />
+                {product.capacity}
+              </Badge>
+            )}
           </div>
         </motion.div>
       )}
 
       <motion.div
-        className="w-full"
+        className="w-full grid grid-cols-2 gap-3"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.9 }}
@@ -183,6 +206,14 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         >
           <Share2 className="w-5 h-5 ml-2" />
           مشاركة
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleCopy}
+          className="h-12 rounded-xl w-full bg-[#40404030] border-neutral-700 text-white transition duration-300 hover:bg-[#40404050] hover:text-[#fde68a]"
+        >
+          <Copy className="w-5 h-5 ml-2" />
+          نسخ الرابط
         </Button>
       </motion.div>
 
@@ -212,13 +243,15 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             {product.features.map((feature, idx) => (
               <motion.div
                 key={idx}
-                className="flex items-center gap-3 py-px"
+                className="flex items-strat gap-3 py-px"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.1 + idx * 0.1 }}
               >
-                <CheckCircle2 className="text-green-400" size={22} />
-                <span className="text-lg leading-relaxed text-green-200">{feature}</span>
+                <CheckCircle2 className="text-green-400 flex-shrink-0 mt-1" size={22} />
+                <span className="text-base font-medium leading-relaxed text-green-200">
+                  {feature}
+                </span>
               </motion.div>
             ))}
           </div>

@@ -11,7 +11,7 @@ import { Product } from "@/model/product.model";
 await dbConnect();
 
 const getCategories = async () => {
-  const categories = await Category.find().lean();
+  const categories = await Category.find().sort({ createdAt: -1 }).lean();
   if (!categories) return success([], 404, "لا توجد فئات حتى الآن.");
   return success(categories, 200);
 };

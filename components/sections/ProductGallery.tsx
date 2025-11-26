@@ -12,7 +12,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface ProductGalleryProps {
   images: string[];
@@ -66,16 +65,16 @@ export default function ProductGallery({
             <Image
               src={images[selectedImage]}
               alt={`${name} - صورة ${selectedImage + 1}`}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-101"
+              width={400}
+              height={400}
+              className="object-cover transition-transform duration-500 group-hover:scale-101 size-full"
               priority={selectedImage === 0}
-              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
 
           <motion.button
             onClick={() => setIsZoomOpen(true)}
-            className="absolute bottom-4 left-4 text-white bg-neutral-800 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute bottom-4 left-4 text-white bg-neutral-800 p-2 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -86,7 +85,7 @@ export default function ProductGallery({
             <>
               <motion.button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white dark:hover:bg-gray-700"
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hover:bg-white dark:hover:bg-gray-700"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -94,7 +93,7 @@ export default function ProductGallery({
               </motion.button>
               <motion.button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white dark:hover:bg-gray-700"
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hover:bg-white dark:hover:bg-gray-700"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -111,8 +110,9 @@ export default function ProductGallery({
                 key={index}
                 onClick={() => setSelectedImage(index)}
                 className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 ${
-                  selectedImage === index ?
-                  "border-primary scale-101" : "border-primary/20"
+                  selectedImage === index
+                    ? "border-primary scale-101"
+                    : "border-primary/20"
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -123,9 +123,9 @@ export default function ProductGallery({
                 <Image
                   src={image}
                   alt={`${name} صورة مصغرة ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 25vw, 12vw"
+                  width={500}
+                  height={500}
+                  className="object-cover w-full h-full"
                 />
                 {selectedImage === index && (
                   <div className="absolute inset-0 bg-primary/10" />
@@ -145,49 +145,28 @@ export default function ProductGallery({
             exit={{ opacity: 0, y: -30 }}
           >
             <div className="relative w-full h-full flex items-center justify-center p-4">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={() => setIsZoomOpen(false)}
-                    className="absolute top-4 right-4 text-white p-2 rounded-full transition-colors z-10 bg-neutral-800 hover:bg-neutral-700"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>إغلاق</p>
-                </TooltipContent>
-              </Tooltip>
+              <button
+                onClick={() => setIsZoomOpen(false)}
+                className="absolute top-4 right-4 text-white p-2 rounded-full transition-colors z-10 bg-neutral-800 hover:bg-neutral-700"
+              >
+                <X className="w-6 h-6" />
+              </button>
 
               {images.length > 1 && (
                 <>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={prevImage}
-                        className="absolute left-4 bg-white/10 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/20 transition-colors z-30"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      <p>الصورة السابقة</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-4 bg-white/10 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/20 transition-colors z-30"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={nextImage}
-                        className="absolute right-4 bg-white/10 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/20 transition-colors z-30"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="left">
-                      <p>الصورة التالية</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-4 bg-white/10 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/20 transition-colors z-30"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
                 </>
               )}
 
@@ -200,8 +179,8 @@ export default function ProductGallery({
                 <Image
                   src={images[selectedImage]}
                   alt={`${name} - صورة ${selectedImage + 1}`}
-                  width={200}
-                  height={200}
+                  width={300}
+                  height={300}
                   className="object-cover w-full h-full"
                 />
               </motion.div>
